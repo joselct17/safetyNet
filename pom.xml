@@ -27,7 +27,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.jsoniter</groupId>
+			<artifactId>jsoniter</artifactId>
+			<version>0.9.23</version>
+		</dependency>
 	</dependencies>
+
 
 	<build>
 		<plugins>
