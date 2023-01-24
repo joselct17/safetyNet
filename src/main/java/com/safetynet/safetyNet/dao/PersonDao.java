@@ -11,17 +11,18 @@ public interface PersonDao {
 
         List<Person> findAll();
 
+        List<Person> getByAddress(String address);
 
-        List<Person> getEmails();
-
-      /**
-        static Person findByName(String firstName, String lastName) {
-
-                return null;
-        } */
+        List<Person> getByCity(String city);
 
 
-        Person save(Person person);
+        List<Person> getEmailsByCity(String city);
+
+        List<Person> getByName(String firstName, String lastName);
+
+    Person save(Person person);
+
+    List<Person> updatePerson();
 
 
 
