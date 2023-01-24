@@ -9,5 +9,8 @@ public interface MedicalRecordsDao {
     List<MedicalRecords> findAll();
 
 
+    MedicalRecords save(MedicalRecords medicalRecords);
+
+
 
 }
