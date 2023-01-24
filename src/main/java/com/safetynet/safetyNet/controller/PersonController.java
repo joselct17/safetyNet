@@ -31,11 +31,6 @@ public class PersonController {
         return personDao.findAll();
     }
 
-    @GetMapping("/person/{firstName}")
-    public Person  showOnePerson(@PathVariable String firstName, String lastName) {
-        return null;
-      // return PersonDao.findByName(firstName, lastName);
-    }
 
     @PostMapping("/person")
     public ResponseEntity<Person> ajouterPerson(@RequestBody Person person) {
@@ -46,12 +41,29 @@ public class PersonController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                        .path("/{firstName?lastName}")
-                                .buildAndExpand(personAdded.getFirstName())
+                        .path("/{lastName}")
+                                .buildAndExpand(personAdded.getLastName())
                                         .toUri();
         return ResponseEntity.created(location).build();
 
     }
+
+   /** @PutMapping("/person/{lastName}")
+    public ResponseEntity<Person> modifierPerson(@PathVariable String lastName, @RequestBody Person person) {
+
+        List<Person> personModified = personDao.updatePerson();
+
+        if (Objects.isNull(personModified)) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{lastName}")
+                .buildAndExpand(personModified())
+                .toUri();
+        return ResponseEntity.created(location).build();
+    } */
 
 
 
