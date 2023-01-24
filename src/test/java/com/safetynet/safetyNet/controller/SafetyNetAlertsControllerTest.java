@@ -44,7 +44,7 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void testGetEmailsInCity() throws Exception {
-        mockMvc.perform(get("/communityEmail"))
+        mockMvc.perform(get("/communityEmail/Culver"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
