@@ -9,9 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Repository
@@ -63,23 +62,42 @@ public class PersonDaoImpl implements PersonDao  {
 
 
     @Override
-    public List<Person> getEmails() {
-
-        for (Person person : listPersons) {
-            List<Person> emails = new ArrayList<>();
-            person.getEmail() ;
-            System.out.println(person.getEmail());
-
-            return emails;
-        }
-        return null;
+    public List<Person> getByName(String firstName, String lastName) {
+        return listPersons.stream()
+                .filter(person -> person.getFirstName().equals(firstName))
+                .filter(person -> person.getLastName().equals(lastName))
+                .collect(Collectors.toList());
     }
 
-    /**
     @Override
-    public void findByName(String firstName, String lastName) {
-        return null;
-    } */
+    public List<Person> getByAddress(String address) {
+        return listPersons.stream()
+                .filter(person -> person.getAddress().equals(address))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<Person> getByCity(String city) {
+        return listPersons.stream()
+                .filter(person -> person.getCity().equals(city))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Person> getEmailsByCity(String city) {
+        Set<String> emails = new HashSet<>();
+        for(Person person : getByCity(city)) {
+            emails.add(person.getEmail());
+        }
+        JSONArray emailsByCity = new JSONArray();
+
+        emailsByCity.add(emails);
+
+
+        return emailsByCity;
+
+    }
 
 
 
@@ -88,6 +106,25 @@ public class PersonDaoImpl implements PersonDao  {
         listPersons.add(person);
         return person;
     }
+
+    @Override
+    public List<Person> updatePerson() {
+        return null;
+    }
+
+   /** public List<Person> updatePerson(String firstName, String lastName) {
+        Set<String> Persons = new HashSet<>();
+        for (Person person : getByName(firstName, lastName)) {
+            Persons.add(person.getFirstName());
+            Persons.add(person.getLastName());
+        }
+        JSONArray updatePersons = new JSONArray();
+
+        updatePersons.add(Persons);
+
+
+        return updatePersons ;
+    } */
 
 
 }
