@@ -18,10 +18,10 @@ import java.util.List;
 @Repository
 public class MedicalRecordsDaoImpl implements MedicalRecordsDao{
 
-    private final ArrayList<MedicalRecords> medicalRecords;
+    private final ArrayList<MedicalRecords> listMedicalRecords;
 
     public MedicalRecordsDaoImpl(ArrayList<MedicalRecords> medicalRecords) throws IOException, ParseException {
-        this.medicalRecords = medicalRecords;
+        this.listMedicalRecords = medicalRecords;
 
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader("src/main/resources/JSON/data.JSON");
@@ -44,7 +44,7 @@ public class MedicalRecordsDaoImpl implements MedicalRecordsDao{
             medicalRec.setMedication((ArrayList<String>) o.get("medications"));
             medicalRec.setAllergies((ArrayList<String>) o.get("allergies"));
 
-            medicalRecords.add(medicalRec);
+            listMedicalRecords.add(medicalRec);
 
 
         }
@@ -53,6 +53,14 @@ public class MedicalRecordsDaoImpl implements MedicalRecordsDao{
 
     @Override
     public List<MedicalRecords> findAll() {
+        return listMedicalRecords;
+    }
+
+    @Override
+    public MedicalRecords save(MedicalRecords medicalRecords) {
+        listMedicalRecords.add(medicalRecords);
         return medicalRecords;
     }
+
+
 }
