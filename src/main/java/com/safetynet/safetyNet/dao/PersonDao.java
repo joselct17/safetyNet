@@ -20,10 +20,13 @@ public interface PersonDao {
 
         List<Person> getByName(String firstName, String lastName);
 
+        List<Person> getByFirestationAddress(String address);
+
+        List<Person> getChildsByAddress(String address);
+
     Person save(Person person);
 
-    List<Person> updatePerson();
-
+    Person update(Person person);
 
 
 }
