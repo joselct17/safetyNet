@@ -49,6 +49,20 @@ class SafetyNetAlertsControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void  testPeopleByFirestation() throws Exception {
+        mockMvc.perform(get("/firestation/3"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void  childsByAddress() throws Exception {
+        mockMvc.perform(get("/childAlert/101 Gotham City"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 
 
 
