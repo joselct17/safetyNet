@@ -8,12 +8,14 @@ public interface FireStationDao {
 
     List<FireStation> findAll();
 
-    List<FireStation> findByAddress();
+    List<FireStation> getByAddress(String address);
+
 
     List<FireStation> findByNumber();
 
+
     FireStation save(FireStation fireStation);
 
-
+    FireStation update(FireStation fireStation);
 
 }
