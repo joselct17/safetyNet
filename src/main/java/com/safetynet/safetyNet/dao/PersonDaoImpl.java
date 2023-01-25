@@ -1,14 +1,11 @@
 package com.safetynet.safetyNet.dao;
 
+import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.Person;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,70 +13,63 @@ import java.util.stream.Collectors;
 @Repository
 public class PersonDaoImpl implements PersonDao  {
 
-    private final ArrayList<Person> listPersons;
 
+    @Autowired
+    private final JsonReader jsonReader;
 
-    public PersonDaoImpl(ArrayList<Person> listPersons) throws IOException, ParseException {
-        this.listPersons = listPersons;
+    public PersonDaoImpl( JsonReader jsonReader)  {
 
-
-        JSONParser parser = new JSONParser();
-        FileReader reader = new FileReader("src/main/resources/JSON/data.JSON");
-
-        Object jsonObj = parser.parse(reader);
-
-        JSONObject jsonObject = (JSONObject) jsonObj;
-
-        JSONArray  persons = (JSONArray ) jsonObject.get("persons");
-
-
-        Iterator<JSONObject> i = persons.iterator();
-
-        while (i.hasNext()) {
-
-            JSONObject o = i.next();
-            Person person = new Person();
-            person.setFirstName((String)o.get("firstName"));
-            person.setLastName((String)o.get("lastName"));
-            person.setAddress((String)o.get("address"));
-            person.setCity((String)o.get("city"));
-            person.setZip((String)o.get("zip"));
-            person.setTelephone((String)o.get("phone"));
-            person.setEmail((String)o.get("email"));
-
-            listPersons.add(person);
-
-        }
+        this.jsonReader = jsonReader;
 
     }
-
 
     @Override
     public List<Person> findAll() {
 
-        return listPersons;
+        return jsonReader.listPersons;
     }
 
 
     @Override
     public List<Person> getByName(String firstName, String lastName) {
-        return listPersons.stream()
+        return jsonReader.listPersons.stream()
                 .filter(person -> person.getFirstName().equals(firstName))
                 .filter(person -> person.getLastName().equals(lastName))
                 .collect(Collectors.toList());
     }
 
+
+
     @Override
     public List<Person> getByAddress(String address) {
-        return listPersons.stream()
+        return jsonReader.listPersons.stream()
                 .filter(person -> person.getAddress().equals(address))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Person> getByFirestationAddress(String address) {
+
+        return null;
+    }
+
+    @Override
+    public List<Person> getChildsByAddress(String address) {
+        List<String> childs = new ArrayList();
+        for (Person person : getByAddress(address)) {
+            childs.add(person.getFirstName() + person.getLastName());
+        }
+        JSONArray childsByAddress = new JSONArray();
+
+        childsByAddress.add(childs);
+
+        return childsByAddress;
     }
 
 
     @Override
     public List<Person> getByCity(String city) {
-        return listPersons.stream()
+        return jsonReader.listPersons.stream()
                 .filter(person -> person.getCity().equals(city))
                 .collect(Collectors.toList());
     }
@@ -103,28 +93,25 @@ public class PersonDaoImpl implements PersonDao  {
 
     @Override
     public Person save(Person person) {
-        listPersons.add(person);
+        jsonReader.listPersons.add(person);
         return person;
     }
 
     @Override
-    public List<Person> updatePerson() {
-        return null;
+    public Person update(Person person) {
+        for (Person p : jsonReader.listPersons) {
+            if (p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName())) {
+                    p.setAddress(person.getAddress());
+                    p.setCity(person.getCity());
+                    p.setEmail(person.getEmail());
+                    p.setTelephone(person.getTelephone());
+                    p.setZip(person.getZip());
+            }
+        }
+        return person;
     }
 
-   /** public List<Person> updatePerson(String firstName, String lastName) {
-        Set<String> Persons = new HashSet<>();
-        for (Person person : getByName(firstName, lastName)) {
-            Persons.add(person.getFirstName());
-            Persons.add(person.getLastName());
-        }
-        JSONArray updatePersons = new JSONArray();
 
-        updatePersons.add(Persons);
-
-
-        return updatePersons ;
-    } */
 
 
 }
