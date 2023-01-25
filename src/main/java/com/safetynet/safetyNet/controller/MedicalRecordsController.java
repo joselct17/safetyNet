@@ -3,11 +3,9 @@ package com.safetynet.safetyNet.controller;
 import com.safetynet.safetyNet.dao.MedicalRecordsDao;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
+import com.safetynet.safetyNet.model.Person;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -44,4 +42,22 @@ public class MedicalRecordsController {
         return ResponseEntity.created(location).build();
 
     }
+
+    @PutMapping("/medicalRecord")
+    public ResponseEntity<MedicalRecords> updateMedicalRecord(@RequestBody MedicalRecords medicalRecords) {
+
+        MedicalRecords medicalRecordsUpdate = medicalRecordsDao.update(medicalRecords);
+
+        if (Objects.isNull(medicalRecordsUpdate)) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{lastName}")
+                .buildAndExpand(medicalRecordsUpdate.getLastName() + medicalRecordsUpdate.getFirstName())
+                .toUri();
+        return ResponseEntity.created(location).build();
+    }
+
 }
