@@ -5,10 +5,7 @@ import com.safetynet.safetyNet.dao.FireStationDao;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.Person;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -43,6 +40,24 @@ public class FireStationController {
                 .fromCurrentRequest()
                 .path("/{stationNumber}")
                 .buildAndExpand(firestationAdded.getStationNumber())
+                .toUri();
+        return ResponseEntity.created(location).build();
+
+    }
+
+    @PutMapping("/firestation")
+    public ResponseEntity<FireStation> updateFirestation(@RequestBody FireStation fireStation) {
+
+        FireStation fireStationUpdate = fireStationDao.update(fireStation);
+
+        if(Objects.isNull(fireStationUpdate)) {
+            return ResponseEntity.noContent().build();
+        }
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{stationNumber}")
+                .buildAndExpand(fireStationUpdate.getStationNumber())
                 .toUri();
         return ResponseEntity.created(location).build();
 
