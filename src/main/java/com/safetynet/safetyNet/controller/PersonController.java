@@ -42,28 +42,29 @@ public class PersonController {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                         .path("/{lastName}")
-                                .buildAndExpand(personAdded.getLastName())
+                                .buildAndExpand(personAdded.getLastName()+personAdded.getFirstName())
                                         .toUri();
         return ResponseEntity.created(location).build();
 
     }
 
-   /** @PutMapping("/person/{lastName}")
-    public ResponseEntity<Person> modifierPerson(@PathVariable String lastName, @RequestBody Person person) {
+    @PutMapping("/person")
+    public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
 
-        List<Person> personModified = personDao.updatePerson();
+       Person personUpdate = personDao.update(person);
 
-        if (Objects.isNull(personModified)) {
-            return ResponseEntity.noContent().build();
-        }
+       if(Objects.isNull(personUpdate)) {
+           return ResponseEntity.noContent().build();
+       }
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{lastName}")
-                .buildAndExpand(personModified())
-                .toUri();
-        return ResponseEntity.created(location).build();
-    } */
+       URI location = ServletUriComponentsBuilder
+               .fromCurrentRequest()
+               .path("/{lastName}")
+               .buildAndExpand(personUpdate.getLastName()+personUpdate.getFirstName())
+               .toUri();
+       return ResponseEntity.created(location).build();
+
+    }
 
 
 
