@@ -12,5 +12,8 @@ public interface MedicalRecordsDao {
     MedicalRecords save(MedicalRecords medicalRecords);
 
 
+    MedicalRecords update(MedicalRecords medicalRecords);
+
+
 
 }
