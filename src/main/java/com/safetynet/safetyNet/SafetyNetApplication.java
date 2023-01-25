@@ -7,8 +7,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 
 import java.io.FileNotFoundException;
@@ -19,6 +22,7 @@ import java.util.Iterator;
 
 @SpringBootApplication
 @ComponentScan({"com.safetynet.safetyNet"})
+@ComponentScan({"com.safetynet.safetyNet.json"})
 public class SafetyNetApplication  extends SpringBootServletInitializer {
 
 
