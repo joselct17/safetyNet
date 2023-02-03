@@ -1,28 +1,20 @@
 package com.safetynet.safetyNet;
 
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
 
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Iterator;
+import java.time.LocalDate;
+import java.time.Period;
 
 
 @SpringBootApplication
 @ComponentScan({"com.safetynet.safetyNet"})
 @ComponentScan({"com.safetynet.safetyNet.json"})
+@ComponentScan({"com.safetynet.safetyNet.service"})
 public class SafetyNetApplication  extends SpringBootServletInitializer {
 
 
