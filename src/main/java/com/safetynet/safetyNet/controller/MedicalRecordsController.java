@@ -1,9 +1,9 @@
 package com.safetynet.safetyNet.controller;
 
-import com.safetynet.safetyNet.dao.MedicalRecordsDao;
-import com.safetynet.safetyNet.model.FireStation;
+import com.safetynet.safetyNet.dao.IMedicalRecordsDao;
 import com.safetynet.safetyNet.model.MedicalRecords;
-import com.safetynet.safetyNet.model.Person;
+import com.safetynet.safetyNet.service.IMedicalRecordService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,10 +15,12 @@ import java.util.Objects;
 @RestController
 public class MedicalRecordsController {
 
-    private final MedicalRecordsDao medicalRecordsDao;
+    private final IMedicalRecordsDao medicalRecordsDao;
+    private final IMedicalRecordService medicalRecordService;
 
-    public MedicalRecordsController(MedicalRecordsDao medicalRecordsDao) {
+    public MedicalRecordsController(IMedicalRecordsDao medicalRecordsDao, IMedicalRecordService medicalRecordService) {
         this.medicalRecordsDao = medicalRecordsDao;
+        this.medicalRecordService = medicalRecordService;
     }
 
 
@@ -29,7 +31,7 @@ public class MedicalRecordsController {
 
     @PostMapping("/medicalRecord")
     public ResponseEntity<MedicalRecords> ajouterMedical(@RequestBody MedicalRecords medicalRecords) {
-        MedicalRecords medicalAdded = medicalRecordsDao.save(medicalRecords);
+        MedicalRecords medicalAdded = medicalRecordService.saveMedicalRecord(medicalRecords);
         if (Objects.isNull(medicalAdded)) {
             return ResponseEntity.noContent().build();
         }
@@ -46,7 +48,7 @@ public class MedicalRecordsController {
     @PutMapping("/medicalRecord")
     public ResponseEntity<MedicalRecords> updateMedicalRecord(@RequestBody MedicalRecords medicalRecords) {
 
-        MedicalRecords medicalRecordsUpdate = medicalRecordsDao.update(medicalRecords);
+        MedicalRecords medicalRecordsUpdate = medicalRecordService.updateMedicalRecord(medicalRecords);
 
         if (Objects.isNull(medicalRecordsUpdate)) {
             return ResponseEntity.noContent().build();
@@ -58,6 +60,15 @@ public class MedicalRecordsController {
                 .buildAndExpand(medicalRecordsUpdate.getLastName() + medicalRecordsUpdate.getFirstName())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+
+
+    @DeleteMapping("/medicalRecord")
+        public ResponseEntity<MedicalRecords> deleteMedical(@RequestParam String firstName, @RequestParam String lastName) {
+        medicalRecordService.deleteMedicalRecord(firstName, lastName);
+
+        return new ResponseEntity<>(HttpStatus.GONE);
     }
 
 }
