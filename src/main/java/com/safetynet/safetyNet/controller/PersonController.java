@@ -3,8 +3,10 @@ package com.safetynet.safetyNet.controller;
 
 
 
-import com.safetynet.safetyNet.dao.PersonDao;
+import com.safetynet.safetyNet.dao.IPersonDao;
 import com.safetynet.safetyNet.model.Person;
+import com.safetynet.safetyNet.service.PersonServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,9 +19,12 @@ import java.util.Objects;
 @RestController
 public class PersonController {
 
-    private final PersonDao personDao;
+    private final PersonServiceImpl personService;
 
-    public PersonController(PersonDao personDao) {
+    private final IPersonDao personDao;
+
+    public PersonController(PersonServiceImpl personService, IPersonDao personDao) {
+        this.personService = personService;
         this.personDao = personDao;
     }
 
@@ -33,8 +38,8 @@ public class PersonController {
 
 
     @PostMapping("/person")
-    public ResponseEntity<Person> ajouterPerson(@RequestBody Person person) {
-        Person personAdded = personDao.save(person);
+    public ResponseEntity<Person> ajouterPerson(@RequestBody Person person) throws Exception {
+        Person personAdded = personService.savePerson(person);
         if (Objects.isNull(personAdded)) {
             return ResponseEntity.noContent().build();
         }
@@ -49,9 +54,9 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
+    public ResponseEntity<Person> updatePerson(@RequestBody Person person) throws Exception {
 
-       Person personUpdate = personDao.update(person);
+       Person personUpdate = personService.updatePerson(person);
 
        if(Objects.isNull(personUpdate)) {
            return ResponseEntity.noContent().build();
@@ -64,6 +69,14 @@ public class PersonController {
                .toUri();
        return ResponseEntity.created(location).build();
 
+    }
+
+
+    @DeleteMapping("/person/{firstName}{lastName}")
+    public ResponseEntity<Person> deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+        personService.deletePerson(firstName, lastName);
+
+        return new ResponseEntity<>(HttpStatus.GONE);
     }
 
 
