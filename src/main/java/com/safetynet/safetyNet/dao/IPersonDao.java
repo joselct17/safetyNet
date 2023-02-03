@@ -7,26 +7,28 @@ import com.safetynet.safetyNet.model.Person;
 import java.util.List;
 
 
-public interface PersonDao {
+public interface IPersonDao {
 
         List<Person> findAll();
 
         List<Person> getByAddress(String address);
 
+        List<Person> getByLastName(String lastName);
+
         List<Person> getByCity(String city);
 
 
-        List<Person> getEmailsByCity(String city);
 
-        List<Person> getByName(String firstName, String lastName);
+        Person getByName(String firstName, String lastName);
 
         List<Person> getByFirestationAddress(String address);
 
-        List<Person> getChildsByAddress(String address);
+
 
     Person save(Person person);
 
     Person update(Person person);
 
 
+    void delete(String firstname, String lastname);
 }
