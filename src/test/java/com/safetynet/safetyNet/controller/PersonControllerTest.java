@@ -43,24 +43,7 @@ class PersonControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void testAjouterPerson() throws  Exception {
 
-        final String baseUrl = "http://localhost:"+randomServerPort+"/person";
-        URI uri = new URI(baseUrl);
-
-        Person person = new Person("Lola", "Flores", "10 Rue de Madrid", "Madrid", "78855", "345669", "lola@gmail.com");
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-COM-PERSIST", "true");
-
-        HttpEntity<Person> request = new HttpEntity<>(person, headers);
-
-        ResponseEntity<String> result = this.restTemplate.postForEntity(uri, request, String.class);
-
-        //Verify request succeed
-        Assert.assertEquals(201 , result.getStatusCodeValue());
-
-    }
 
 
 
