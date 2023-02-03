@@ -4,18 +4,20 @@ import com.safetynet.safetyNet.model.FireStation;
 
 import java.util.List;
 
-public interface FireStationDao {
+public interface IFireStationDao {
 
     List<FireStation> findAll();
 
-    List<FireStation> getByAddress(String address);
+    String getByAddress(String address);
 
 
-    List<FireStation> findByNumber();
+    List<FireStation> getByStationNumber(String stationNumber);
 
 
     FireStation save(FireStation fireStation);
 
     FireStation update(FireStation fireStation);
+
+    void delete(String address, String stationNumber);
 
 }
