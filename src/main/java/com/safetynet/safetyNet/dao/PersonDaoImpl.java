@@ -2,7 +2,6 @@ package com.safetynet.safetyNet.dao;
 
 import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.Person;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +10,7 @@ import java.util.stream.Collectors;
 
 
 @Repository
-public class PersonDaoImpl implements PersonDao  {
+public class PersonDaoImpl implements IPersonDao {
 
 
     @Autowired
@@ -31,11 +30,15 @@ public class PersonDaoImpl implements PersonDao  {
 
 
     @Override
-    public List<Person> getByName(String firstName, String lastName) {
-        return jsonReader.listPersons.stream()
-                .filter(person -> person.getFirstName().equals(firstName))
-                .filter(person -> person.getLastName().equals(lastName))
+    public Person getByName(String firstName, String lastName) {
+        List<Person> result = jsonReader.listPersons.stream()
+                .filter(person -> (person.getFirstName().equals(firstName) &&
+                person.getLastName().equals(lastName)))
                 .collect(Collectors.toList());
+        if (result.size()==1) {
+            return result.get(0);
+        }
+        else return null;
     }
 
 
@@ -48,23 +51,19 @@ public class PersonDaoImpl implements PersonDao  {
     }
 
     @Override
+    public List<Person> getByLastName(String lastName) {
+        return jsonReader.listPersons.stream()
+                .filter(person -> person.getLastName().equals(lastName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Person> getByFirestationAddress(String address) {
 
         return null;
     }
 
-    @Override
-    public List<Person> getChildsByAddress(String address) {
-        List<String> childs = new ArrayList();
-        for (Person person : getByAddress(address)) {
-            childs.add(person.getFirstName() + person.getLastName());
-        }
-        JSONArray childsByAddress = new JSONArray();
 
-        childsByAddress.add(childs);
-
-        return childsByAddress;
-    }
 
 
     @Override
@@ -74,20 +73,7 @@ public class PersonDaoImpl implements PersonDao  {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Person> getEmailsByCity(String city) {
-        Set<String> emails = new HashSet<>();
-        for(Person person : getByCity(city)) {
-            emails.add(person.getEmail());
-        }
-        JSONArray emailsByCity = new JSONArray();
 
-        emailsByCity.add(emails);
-
-
-        return emailsByCity;
-
-    }
 
 
 
@@ -111,7 +97,13 @@ public class PersonDaoImpl implements PersonDao  {
         return person;
     }
 
+    @Override
+    public void delete(String firstname, String lastname) {
+            jsonReader.listPersons.removeIf
+                    (person -> (person.getFirstName().equals(firstname)
+                            &&person.getLastName().equals(lastname)));
 
+    }
 
 
 }
