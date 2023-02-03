@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 @Component
@@ -83,7 +84,7 @@ public class JsonReader {
             MedicalRecords medicalRec = new MedicalRecords();
             medicalRec.setFirstName((String)o.get("firstName"));
             medicalRec.setLastName((String)o.get("lastName"));
-            medicalRec.setBirthDate((String)o.get("birthdate"));
+            medicalRec.setBirthDate((String) o.get("birthdate"));
             medicalRec.setMedication((ArrayList<String>) o.get("medications"));
             medicalRec.setAllergies((ArrayList<String>) o.get("allergies"));
 
