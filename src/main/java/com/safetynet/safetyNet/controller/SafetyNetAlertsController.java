@@ -64,7 +64,7 @@ public class SafetyNetAlertsController {
         return phoneNumber;
     }
 
-
+    //http://localhost:8080/firestation?stationNumber=%3Cstation_number
     @GetMapping("/firestation/{stationNumber}")
     public JSONObject peopleByFireStation(@PathVariable String stationNumber) {
         JSONObject people = new JSONObject();
