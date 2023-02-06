@@ -7,7 +7,6 @@ import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,20 +80,18 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 JSONArray array = new JSONArray();
                 //array.add(childs);
                 list.add(childs);
-
-
-                personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
-
-                    LinkedHashMap<String, String> parents = new LinkedHashMap<>();
-                    parents.put("Firstname", p2.getFirstName());
-                    parents.put("Lastname", p2.getLastName());
-
-                    list.add(parents);
-
-                });
-
             }
         }
+        Person person = new Person();
+        personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
+
+            LinkedHashMap<String, String> parents = new LinkedHashMap<>();
+            parents.put("Firstname", p2.getFirstName());
+            parents.put("Lastname", p2.getLastName());
+
+            list.add(parents);
+
+        });
         return list;
     }
 
@@ -119,11 +116,11 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     }
 
     @Override
-    public ArrayList<LinkedHashMap> getPeopleByStationNumber(String stationNumber) {
+    public ArrayList<HashMap> getPeopleByStationNumber(String stationNumber) {
 
-        ArrayList<LinkedHashMap> list = new ArrayList<>();
-
-
+        int numberOfadults = 0;
+        int numberOfChildren = 0;
+        ArrayList<HashMap> list = new ArrayList<>();
 
         List<String> peopleByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
 
@@ -140,8 +137,20 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
                list.add(people);
 
+               MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
+
+                if (ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)) >=18 ) {
+                    numberOfadults++;
+                }
+                else {
+                    numberOfChildren++;
+                }
             }
         }
+        HashMap<String, Integer> number = new HashMap<String, Integer>();
+        number.put("Adults", numberOfadults);
+        number.put("Childs", numberOfChildren);
+        list.add(number);
 
         return list;
     }
