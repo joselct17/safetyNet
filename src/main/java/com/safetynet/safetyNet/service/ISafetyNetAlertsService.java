@@ -22,4 +22,6 @@ public interface ISafetyNetAlertsService {
 
 
     Set<String> getPhoneNumberForStationNumber(String stationNumber);
+
+    ArrayList<HashMap> getPeopleByAddress(String address);
 }
