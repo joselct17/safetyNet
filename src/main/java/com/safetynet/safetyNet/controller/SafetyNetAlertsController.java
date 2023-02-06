@@ -47,19 +47,19 @@ public class SafetyNetAlertsController {
 
         childs.put("Childs", result);
 
-        return childs ;
+        return childs;
     }
 
 
     //http://localhost:8080/phoneAlert?firestation=%3Cfirestation_number
     @GetMapping("/phoneAlert/{stationNumber}")
-    public JSONObject phoneNumber(@PathVariable String stationNumber)  {
+    public JSONObject phoneNumber(@PathVariable String stationNumber) {
 
         JSONObject phoneNumber = new JSONObject();
         JSONArray result = new JSONArray();
 
         result.add(safetyNetAlertsService.getPhoneNumberForStationNumber(stationNumber));
-        phoneNumber.put("Phone" ,result);
+        phoneNumber.put("Phone", result);
 
         return phoneNumber;
     }
@@ -75,9 +75,24 @@ public class SafetyNetAlertsController {
         people.put("People", result);
 
 
-      return people ;
+        return people ;
 
     }
 
+
+    //http://localhost:8080/fire?address=<address>
+    @GetMapping("/people/{address}")
+        public JSONObject peopleByFirestationAdress (@PathVariable String address){
+            JSONObject people = new JSONObject();
+            JSONArray result = new JSONArray();
+
+            result.add(safetyNetAlertsService.getPeopleByAddress(address));
+
+            people.put("People", result);
+
+
+
+        return people;
+    }
 
 }
