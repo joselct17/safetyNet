@@ -120,6 +120,9 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
         int numberOfadults = 0;
         int numberOfChildren = 0;
+
+        FireStation fireStation = new FireStation();
+
         ArrayList<HashMap> list = new ArrayList<>();
 
         List<String> peopleByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
@@ -151,6 +154,44 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
         number.put("Adults", numberOfadults);
         number.put("Childs", numberOfChildren);
         list.add(number);
+
+        return list;
+    }
+
+
+    @Override
+    public ArrayList<HashMap> getPeopleByAddress(String address) {
+
+        FireStation fireStation = new FireStation();
+
+        String fireStationNumber = fireStationDao.getByAddress(address);
+
+       String stationNumber = fireStation.getStationNumber();
+
+        ArrayList<HashMap> list = new ArrayList<>();
+
+        List<String> peopleByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
+
+        for (Person person : personDao.findAll()) {
+
+                MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
+
+
+
+                LinkedHashMap<String, String> people = new LinkedHashMap<>();
+
+                people.put("Firstname", person.getFirstName());
+                people.put("Lastname", person.getLastName());
+                people.put("Phone", person.getTelephone());
+                people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
+                people.put("Medications", medicalRecords.getMedication().toString());
+                people.put("Allergies", medicalRecords.getAllergies().toString());
+                people.put("Firestation", fireStationNumber);
+
+
+                list.add(people);
+
+        }
 
         return list;
     }
