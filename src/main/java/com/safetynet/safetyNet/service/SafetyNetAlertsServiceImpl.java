@@ -58,11 +58,11 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     }
 
     @Override
-    public ArrayList<JSONArray> getChildsByAddress(String address) throws ParseException {
+    public ArrayList<LinkedHashMap> getChildsByAddress(String address) throws ParseException {
 
         List<Person> personListByAddress = personDao.getByAddress(address);
 
-        ArrayList<JSONArray> list = new ArrayList<>();
+        ArrayList<LinkedHashMap> list = new ArrayList<>();
 
         for (Person person : personListByAddress) {
 
@@ -72,24 +72,24 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
             if (ageCalculator(age) < 18) {
 
-                JSONObject obj = new JSONObject();
+                LinkedHashMap<String, String> childs = new LinkedHashMap<>();
 
-                obj.put("Firstname", person.getFirstName());
-                obj.put("Lastname", person.getLastName());
-                obj.put("Age", (ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter))));
+                childs.put("Firstname", person.getFirstName());
+                childs.put("Lastname", person.getLastName());
+                childs.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
                 JSONArray array = new JSONArray();
-                array.add(obj);
-                list.add(array);
+                //array.add(childs);
+                list.add(childs);
 
 
                 personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
 
-                   JSONObject objParents = new JSONObject();
-                    objParents.put("Firstname", p2.getFirstName());
-                    objParents.put("Lastname", p2.getLastName());
+                    LinkedHashMap<String, String> parents = new LinkedHashMap<>();
+                    parents.put("Firstname", p2.getFirstName());
+                    parents.put("Lastname", p2.getLastName());
 
-                    array.add(objParents);
+                    list.add(parents);
 
                 });
 
@@ -119,43 +119,30 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     }
 
     @Override
-    public JSONObject getPeopleByStation(String stationNumber) {
+    public ArrayList<LinkedHashMap> getPeopleByStationNumber(String stationNumber) {
 
-        ArrayList<Person> people = new ArrayList<>();
+        ArrayList<LinkedHashMap> list = new ArrayList<>();
 
-        List<String> addressByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
+
+
+        List<String> peopleByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
 
         for (Person person : personDao.findAll()) {
-            if (addressByStationNumber.contains(person.getAddress())) {
-                Person person1 = new Person();
-                person1.setFirstName(person.getFirstName());
-                person1.setLastName(person.getLastName());
-                person1.setAddress(person.getAddress());
-                person1.setTelephone(person.getTelephone());
+            if (peopleByStationNumber.contains(person.getAddress())) {
 
-                people.add(person1);
+                LinkedHashMap<String, String> people = new LinkedHashMap<>();
+
+                people.put("Firstname", person.getFirstName());
+                people.put("Lastname", person.getLastName());
+                people.put("Address", person.getAddress());
+                people.put( "Phone", person.getTelephone());
+
+
+               list.add(people);
+
             }
         }
 
-        MedicalRecords medicalRecords = new MedicalRecords();
-        JSONObject peopleCounter = new JSONObject();
-
-      if (ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)) <18) {
-          for ( int i = (ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter))); i<18; i++ ) {
-              Integer childs =i ;
-              peopleCounter.put("Childs", childs);
-          }
-      } else if(ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)) >18) {
-          for ( int i = (ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter))); i>18; i++ ) {
-              Integer adults =i ;
-              peopleCounter.put("Adults", adults);
-          }
-      }
-JSONObject def = new JSONObject();
-      def.put("People", people);
-      def.put("Counter", peopleCounter);
-
-
-        return def;
+        return list;
     }
 }
