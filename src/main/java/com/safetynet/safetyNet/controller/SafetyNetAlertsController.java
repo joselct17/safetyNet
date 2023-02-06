@@ -1,6 +1,5 @@
 package com.safetynet.safetyNet.controller;
 
-import com.safetynet.safetyNet.model.Person;
 import com.safetynet.safetyNet.service.ISafetyNetAlertsService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
-import java.util.List;
+import java.util.ArrayList;
 
 
 @RestController
@@ -68,8 +67,15 @@ public class SafetyNetAlertsController {
 
     @GetMapping("/firestation/{stationNumber}")
     public JSONObject peopleByFireStation(@PathVariable String stationNumber) {
+        JSONObject people = new JSONObject();
+        JSONArray result = new JSONArray();
 
-      return safetyNetAlertsService.getPeopleByStation(stationNumber);
+        result.add(safetyNetAlertsService.getPeopleByStationNumber(stationNumber));
+
+        people.put("People", result);
+
+
+      return people ;
 
     }
 
