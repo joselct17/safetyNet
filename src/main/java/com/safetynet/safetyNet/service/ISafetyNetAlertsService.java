@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public interface ISafetyNetAlertsService {
     ArrayList<LinkedHashMap> getChildsByAddress(String address) throws ParseException;
 
 
-    ArrayList<LinkedHashMap> getPeopleByStationNumber(String stationNumber);
+    ArrayList<HashMap> getPeopleByStationNumber(String stationNumber);
 
 
     Set<String> getPhoneNumberForStationNumber(String stationNumber);
