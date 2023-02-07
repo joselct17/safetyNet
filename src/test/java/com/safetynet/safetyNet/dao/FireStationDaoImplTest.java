@@ -2,7 +2,7 @@ package com.safetynet.safetyNet.dao;
 
 import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.FireStation;
-import com.safetynet.safetyNet.model.Person;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.util.ArrayList;
 import java.util.List;
