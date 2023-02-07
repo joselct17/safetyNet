@@ -22,6 +22,9 @@ public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
         this.jsonReader = jsonReader;
 
     }
+    protected void setMedicalList(ArrayList<MedicalRecords> listMedicalRecords) {
+        this.jsonReader.listMedicalRecords = listMedicalRecords;
+    }
 
     @Override
     public List<MedicalRecords> findAll() {
