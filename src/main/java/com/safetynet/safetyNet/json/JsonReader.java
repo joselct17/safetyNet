@@ -20,9 +20,9 @@ public class JsonReader {
 
     public ArrayList<Person> listPersons;
 
-    public final ArrayList<FireStation> listFireStation;
+    public ArrayList<FireStation> listFireStation;
 
-    public final ArrayList<MedicalRecords> listMedicalRecords;
+    public ArrayList<MedicalRecords> listMedicalRecords;
 
 
     public JsonReader(ArrayList<Person> listPersons, ArrayList<FireStation> listFireStation, ArrayList<MedicalRecords> listMedicalRecords ) throws ParseException, IOException, FileNotFoundException {
