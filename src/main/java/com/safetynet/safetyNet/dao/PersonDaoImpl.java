@@ -2,6 +2,7 @@ package com.safetynet.safetyNet.dao;
 
 import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.Person;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,14 +14,20 @@ import java.util.stream.Collectors;
 public class PersonDaoImpl implements IPersonDao {
 
 
+    private ArrayList<Person> listPersons;
     @Autowired
     private final JsonReader jsonReader;
 
-    public PersonDaoImpl( JsonReader jsonReader)  {
+
+    public PersonDaoImpl(JsonReader jsonReader)  {
 
         this.jsonReader = jsonReader;
-
     }
+
+    protected void setPersonList(ArrayList<Person> listPersons) {
+        this.jsonReader.listPersons = listPersons;
+    }
+
 
     @Override
     public List<Person> findAll() {
@@ -42,7 +49,6 @@ public class PersonDaoImpl implements IPersonDao {
     }
 
 
-
     @Override
     public List<Person> getByAddress(String address) {
         return jsonReader.listPersons.stream()
@@ -57,14 +63,6 @@ public class PersonDaoImpl implements IPersonDao {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<Person> getByFirestationAddress(String address) {
-
-        return null;
-    }
-
-
-
 
     @Override
     public List<Person> getByCity(String city) {
@@ -72,9 +70,6 @@ public class PersonDaoImpl implements IPersonDao {
                 .filter(person -> person.getCity().equals(city))
                 .collect(Collectors.toList());
     }
-
-
-
 
 
     @Override
