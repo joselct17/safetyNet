@@ -18,7 +18,7 @@ import java.util.Iterator;
 @Component
 public class JsonReader {
 
-    public final ArrayList<Person> listPersons;
+    public ArrayList<Person> listPersons;
 
     public final ArrayList<FireStation> listFireStation;
 
