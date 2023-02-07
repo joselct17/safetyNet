@@ -45,8 +45,8 @@ public class PersonDaoImplTest {
     void testGetByCity()   throws Exception {
         //Arrange
         List<Person> expected = new ArrayList<>(Arrays.asList(
-                new Person("John","Doe","adress1", "Varadero", "1111", "888888888", "johndoe@mail.com"),
-                new Person("Mike","Doe","adress2", "Varadero", "2222", "99999999", "mikedoe@mail.com")
+                new Person("John","Doe","address1", "Varadero", "1111", "888888888", "johndoe@mail.com"),
+                new Person("Mike","Doe","address1", "Varadero", "2222", "99999999", "mikedoe@mail.com")
         ));
 
         //Act
@@ -61,7 +61,7 @@ public class PersonDaoImplTest {
         //Arrange
         List<Person> expected = new ArrayList<>(Arrays.asList(
                 new Person("John","Doe","address1", "Varadero", "1111", "888888888", "johndoe@mail.com"),
-                new Person("Mike","Doe","address2", "Varadero", "2222", "99999999", "mikedoe@mail.com")
+                new Person("Mike","Doe","address1", "Varadero", "2222", "99999999", "mikedoe@mail.com")
         ));
 
         //Act
