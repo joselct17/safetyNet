@@ -160,7 +160,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
 
     @Override
-    public ArrayList<HashMap> getPeopleByAddress(String address) {
+    public ArrayList<HashMap> getPeopleByFireAddress(String address) {
 
         FireStation fireStation = new FireStation();
 
@@ -192,6 +192,37 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 list.add(people);
 
         }
+
+        return list;
+    }
+
+    @Override
+    public ArrayList<HashMap> getPeopleByName(String firstName, String lastName) {
+
+        ArrayList<HashMap> list = new ArrayList<>();
+
+        Person person = personDao.getByName(firstName, lastName);
+
+        if (person!= null) {
+            for (Person p: personDao.getByLastName(person.getLastName())) {
+
+                MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
+
+                LinkedHashMap<String, String> people = new LinkedHashMap<>();
+
+                people.put("Firstname", p.getFirstName());
+                people.put("Lastname", p.getLastName());
+                people.put("Address", p.getAddress());
+                people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
+                people.put("Email", p.getEmail());
+                people.put("Medications", medicalRecords.getMedication().toString());
+                people.put("Allergies", medicalRecords.getAllergies().toString());
+
+                list.add(people);
+
+            }
+        }
+
 
         return list;
     }
