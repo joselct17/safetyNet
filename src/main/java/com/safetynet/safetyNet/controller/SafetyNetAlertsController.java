@@ -4,8 +4,11 @@ import com.safetynet.safetyNet.service.ISafetyNetAlertsService;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
@@ -22,7 +25,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/communityEmail?city=<city>
     @GetMapping("/communityEmail/{city}")
-    public JSONObject peopleByCity(@PathVariable String city) {
+    public ResponseEntity<JSONObject> peopleByCity(@PathVariable String city) {
 
         JSONObject peopleByCity = new JSONObject();
         JSONArray result = new JSONArray();
@@ -31,14 +34,14 @@ public class SafetyNetAlertsController {
 
         peopleByCity.put("Emails", result);
 
-        return peopleByCity;
+        return new ResponseEntity<>(peopleByCity, HttpStatus.OK);
 
     }
 
 
     //http://localhost:8080/childAlert?address=%3Caddress
     @GetMapping("/childAlert/{address}")
-    public JSONObject childs(@PathVariable String address) throws ParseException {
+    public ResponseEntity <JSONObject> childs(@PathVariable String address) throws ParseException {
 
         JSONObject childs = new JSONObject();
         JSONArray result = new JSONArray();
@@ -47,13 +50,13 @@ public class SafetyNetAlertsController {
 
         childs.put("Childs", result);
 
-        return childs;
+        return new ResponseEntity<>(childs, HttpStatus.OK);
     }
 
 
     //http://localhost:8080/phoneAlert?firestation=%3Cfirestation_number
     @GetMapping("/phoneAlert/{stationNumber}")
-    public JSONObject phoneNumber(@PathVariable String stationNumber) {
+    public ResponseEntity<JSONObject> phoneNumber(@PathVariable String stationNumber) {
 
         JSONObject phoneNumber = new JSONObject();
         JSONArray result = new JSONArray();
@@ -61,12 +64,13 @@ public class SafetyNetAlertsController {
         result.add(safetyNetAlertsService.getPhoneNumberForStationNumber(stationNumber));
         phoneNumber.put("Phone", result);
 
-        return phoneNumber;
+        return new ResponseEntity<>(phoneNumber, HttpStatus.OK);
     }
 
     //http://localhost:8080/firestation?stationNumber=%3Cstation_number
     @GetMapping("/firestation/{stationNumber}")
-    public JSONObject peopleByFireStation(@PathVariable String stationNumber) {
+    public ResponseEntity<JSONObject>  peopleByFireStation(@PathVariable String stationNumber) {
+
         JSONObject people = new JSONObject();
         JSONArray result = new JSONArray();
 
@@ -75,24 +79,40 @@ public class SafetyNetAlertsController {
         people.put("People", result);
 
 
-        return people ;
+        return new ResponseEntity<>(people, HttpStatus.OK)  ;
 
     }
 
 
     //http://localhost:8080/fire?address=<address>
     @GetMapping("/people/{address}")
-        public JSONObject peopleByFirestationAdress (@PathVariable String address){
+        public ResponseEntity <JSONObject> peopleByFirestationAdress (@PathVariable String address){
+
             JSONObject people = new JSONObject();
             JSONArray result = new JSONArray();
 
-            result.add(safetyNetAlertsService.getPeopleByAddress(address));
+            result.add(safetyNetAlertsService.getPeopleByFireAddress(address));
 
             people.put("People", result);
 
+        return new ResponseEntity<>(people, HttpStatus.OK);
+    }
 
 
-        return people;
+
+    //http://localhost:8080/personInfo?firstName=%3CfirstName%3E&lastName=%3ClastName
+    @GetMapping("/personInfo/{firstName}+{lastName}")
+    public ResponseEntity<JSONObject> peopleByName(@PathVariable String firstName, @PathVariable String lastName) {
+
+        JSONObject people = new JSONObject();
+        JSONArray result = new JSONArray();
+
+        result.add(safetyNetAlertsService.getPeopleByName(firstName,lastName));
+
+        people.put("People", result);
+
+        return new ResponseEntity<>(people, HttpStatus.OK) ;
+
     }
 
 }
