@@ -21,7 +21,7 @@ public interface IPersonDao {
 
         Person getByName(String firstName, String lastName);
 
-        List<Person> getByFirestationAddress(String address);
+
 
 
 
