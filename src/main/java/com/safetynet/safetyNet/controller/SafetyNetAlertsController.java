@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -73,24 +74,26 @@ public class SafetyNetAlertsController {
     //http://localhost:8080/fire?address=<address>
     @GetMapping("/fire/{address}")
     public ResponseEntity <JSONObject> peopleByFirestationAdress (@PathVariable String address){
+        logger.info("GET /fire call");
 
         JSONObject object = new JSONObject();
         JSONArray result = new JSONArray();
         result.add(safetyNetAlertsService.getPeopleByFireAddress(address));
         object.put("People", result);
 
+        logger.info("GET /fire respoonse : OK");
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 
-    @GetMapping("/flood/{stationNumber}")
-    public ResponseEntity<JSONObject> peopleByStationNumber(@PathVariable String stationNumber) {
+    @GetMapping("/flood/{stationNumberList}")
+    public ResponseEntity<JSONObject> peopleByStationNumber(@PathVariable List<String> stationNumberList) {
         logger.info("GET /flood called");
 
         JSONObject object = new JSONObject();
         JSONArray result = new JSONArray();
-        result.add(safetyNetAlertsService.getPeopleByStationNumber(stationNumber));
+        result.add(safetyNetAlertsService.getAddressesListOfPersonsByStationNumberList(stationNumberList));
         object.put("People", result);
 
         logger.info("GET /flodd response : OK");
