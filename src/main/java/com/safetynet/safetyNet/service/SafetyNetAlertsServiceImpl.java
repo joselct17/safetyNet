@@ -85,11 +85,11 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
         Person person = new Person();
         personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
 
-            LinkedHashMap<String, String> parents = new LinkedHashMap<>();
-            parents.put("Firstname", p2.getFirstName());
-            parents.put("Lastname", p2.getLastName());
+            LinkedHashMap<String, String> adults = new LinkedHashMap<>();
+            adults.put("Firstname", p2.getFirstName());
+            adults.put("Lastname", p2.getLastName());
 
-            list.add(parents);
+            list.add(adults);
 
         });
         return list;
@@ -222,6 +222,50 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
             }
         }
+
+
+        return list;
+    }
+
+    @Override
+    public ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList(List<String> stationNumberList) {
+
+        ArrayList<HashMap> list = new ArrayList<>();
+
+    for (String i : stationNumberList ) {
+
+        LinkedHashMap<String, String> fireStations = new LinkedHashMap<>();
+
+        fireStations.put("StationNumber", i);
+
+        List<FireStation> fireStationList = fireStationDao.getByStationNumber(i);
+
+        list.add(fireStations);
+        for (FireStation fireStation : fireStationList) {
+
+            LinkedHashMap<String, String> addressList = new LinkedHashMap<>();
+
+            addressList.put("address", fireStation.getAddress());
+            List<Person> personsList = personDao.getByAddress(fireStation.getAddress());
+
+            list.add(addressList);
+            for ( Person person : personsList) {
+                MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
+
+                LinkedHashMap<String, String> people = new LinkedHashMap<>();
+
+                people.put("Firstname", person.getFirstName());
+                people.put("Lastname", person.getLastName());
+                people.put("Phone", person.getTelephone());
+                people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
+                people.put("Medications", medicalRecords.getMedication().toString());
+                people.put("Allergies", medicalRecords.getAllergies().toString());
+
+                list.add(people);
+            }
+        }
+
+    }
 
 
         return list;
