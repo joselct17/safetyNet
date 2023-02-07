@@ -162,21 +162,15 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     @Override
     public ArrayList<HashMap> getPeopleByFireAddress(String address) {
 
-        FireStation fireStation = new FireStation();
-
         String fireStationNumber = fireStationDao.getByAddress(address);
-
-       String stationNumber = fireStation.getStationNumber();
 
         ArrayList<HashMap> list = new ArrayList<>();
 
-        List<String> peopleByStationNumber = fireStationDao.getByStationNumber(stationNumber).stream().map(FireStation::getAddress).collect(Collectors.toList());
+        List<Person> personList = personDao.getByAddress(address);
 
-        for (Person person : personDao.findAll()) {
+        for (Person person : personList) {
 
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
-
-
 
                 LinkedHashMap<String, String> people = new LinkedHashMap<>();
 
