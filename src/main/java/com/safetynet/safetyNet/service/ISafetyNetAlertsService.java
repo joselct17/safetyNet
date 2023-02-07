@@ -3,10 +3,7 @@ package com.safetynet.safetyNet.service;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public interface ISafetyNetAlertsService {
@@ -27,4 +24,10 @@ public interface ISafetyNetAlertsService {
 
 
     ArrayList<HashMap> getPeopleByName(String firstName, String lastName);
+
+
+    ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList( List<String> stationNumberList );
+
+
+
 }
