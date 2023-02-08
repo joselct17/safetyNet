@@ -44,7 +44,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/childAlert?address=%3Caddress
     @GetMapping("/childAlert/{address}")
-    public ResponseEntity <JSONObject> childs(@PathVariable String address) throws ParseException {
+    public ResponseEntity <JSONObject> childsAlert(@PathVariable String address) throws ParseException {
         logger.info("GET /childAlert called");
 
         JSONObject object = new JSONObject();
@@ -73,7 +73,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/fire?address=<address>
     @GetMapping("/fire/{address}")
-    public ResponseEntity <JSONObject> peopleByFirestationAdress (@PathVariable String address){
+    public ResponseEntity <JSONObject> peopleByFirestationAddress (@PathVariable String address){
         logger.info("GET /fire call");
 
         JSONObject object = new JSONObject();
