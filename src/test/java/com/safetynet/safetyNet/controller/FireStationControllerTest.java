@@ -77,9 +77,22 @@ class FireStationControllerTest {
     }
     @Test
     void testPutFirestation() throws Exception {
-        mockMvc.perform(put("/firestation"))
-                .andDo(print())
-                .andExpect(status().isOk());
+
+        FireStation fireStationToUpdateMock = new FireStation("101 Av", "4");
+
+        FireStation fireStationUpdatedMock = new FireStation("200 Av", "5");
+
+        Mockito.when(iFireStationDao.update(fireStationToUpdateMock)).thenReturn(fireStationUpdatedMock);
+
+        String content = objectWriter.writeValueAsString(fireStationUpdatedMock);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/firestation")
+                        .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                        .content(content);
+        mockMvc.perform(mockRequest)
+                        .andExpect(status().is(201));
+
     }
 
 
