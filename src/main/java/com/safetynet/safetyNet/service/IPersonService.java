@@ -2,6 +2,8 @@ package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.model.Person;
 
+import java.util.List;
+
 public interface IPersonService {
 
     Person savePerson(Person person) throws Exception;
@@ -11,4 +13,5 @@ public interface IPersonService {
     void deletePerson(String firstname, String lastname);
 
 
+    List<Person> getAllPerson();
 }
