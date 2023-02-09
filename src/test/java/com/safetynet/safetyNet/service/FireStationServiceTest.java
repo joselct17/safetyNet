@@ -2,6 +2,10 @@ package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.dao.IFireStationDao;
 import com.safetynet.safetyNet.model.FireStation;
+import com.safetynet.safetyNet.model.MedicalRecords;
+import com.safetynet.safetyNet.model.Person;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -28,7 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-public class IFireStationServiceTest {
+public class FireStationServiceTest {
 
     @LocalServerPort
     int randomServerPort;
@@ -45,8 +52,32 @@ public class IFireStationServiceTest {
     @InjectMocks
     FireStationServiceImpl fireStationServiceImplMock;
 
+    List<FireStation> fireStationList;
+    @BeforeEach
+            void data() {
+        fireStationList  = new ArrayList<>(Arrays.asList(
+                new FireStation("101 Av", "3"),
+                new FireStation("102 Av", "4"),
+                new FireStation("103 Av", "5")
+        ));
+
+    }
 
 
+    @Test
+    @DisplayName("test getAllFireStation")
+    void testGetAllFirestations() {
+        List<FireStation> expected = new ArrayList<>(Arrays.asList(
+                new FireStation("101 Av", "3"),
+                new FireStation("102 Av", "4"),
+                new FireStation("103 Av", "5")));
+
+        when(iFireStationDaoMock.findAll()).thenReturn(fireStationList);
+
+        List<FireStation> result = fireStationServiceImplMock.getAllFirestation();
+
+        assertEquals(expected, result);
+    }
     @Test
     void testSaveFireStation() throws Exception {
 
