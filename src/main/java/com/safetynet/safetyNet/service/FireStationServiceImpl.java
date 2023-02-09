@@ -5,6 +5,8 @@ import com.safetynet.safetyNet.model.FireStation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FireStationServiceImpl implements IFireStationService{
 
@@ -37,5 +39,10 @@ public class FireStationServiceImpl implements IFireStationService{
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public List<FireStation> getAllFirestation() {
+        return fireStationDao.findAll();
     }
 }
