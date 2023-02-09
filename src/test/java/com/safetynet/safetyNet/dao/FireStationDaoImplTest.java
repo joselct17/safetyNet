@@ -18,6 +18,7 @@ import java.util.Arrays;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -72,4 +73,18 @@ public class FireStationDaoImplTest {
         assertEquals(1,objectList.size(),"Expected list size is 3");
         assertEquals(expectedList,objectList,"Returned list must one Firestation");
     }
+
+    @Test
+    @DisplayName("Test getByAddress, address not found")
+    void testGetByAddressNotFound() throws Exception {
+        //Arrange
+
+        //Act
+        String result = fireStationDaoCUT.getByAddress("adressUnknown");
+
+        //Assert
+        assertNull(result,"Returned value must be null");
+    }
+
+
 }
