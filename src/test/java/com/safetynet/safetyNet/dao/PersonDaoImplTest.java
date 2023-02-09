@@ -90,7 +90,7 @@ public class PersonDaoImplTest {
     }
 
     @Test
-    @DisplayName("Test get by address")
+    @DisplayName("Test get by Name")
     void testGetByName() throws Exception {
         //Arrange
         Person expected =
