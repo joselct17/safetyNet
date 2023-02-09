@@ -77,8 +77,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 childs.put("Lastname", person.getLastName());
                 childs.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
-                JSONArray array = new JSONArray();
-                //array.add(childs);
+
                 list.add(childs);
             }
         }
