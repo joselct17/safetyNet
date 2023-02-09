@@ -13,10 +13,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -24,6 +26,7 @@ import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,11 +46,10 @@ class FireStationControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @InjectMocks
-    FireStationServiceImpl fireStationServiceImpl;
 
-    @Mock
-    private IFireStationDao iFireStationDao;
+
+    @MockBean
+    private FireStationServiceImpl fireStationServiceImpl;
 
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -65,7 +67,7 @@ class FireStationControllerTest {
     void testPostFirestation() throws Exception {
 
         FireStation fireStationMock = new FireStation("101 Av", "5");
-        Mockito.when(iFireStationDao.save(fireStationMock)).thenReturn(fireStationMock);
+        Mockito.when(fireStationServiceImpl.saveFirestation(fireStationMock)).thenReturn(fireStationMock);
         String content = objectWriter.writeValueAsString(fireStationMock);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/firestation")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -82,25 +84,25 @@ class FireStationControllerTest {
 
         FireStation fireStationUpdatedMock = new FireStation("200 Av", "5");
 
-        Mockito.when(iFireStationDao.update(fireStationToUpdateMock)).thenReturn(fireStationUpdatedMock);
+        Mockito.when(fireStationServiceImpl.updateFirestation(fireStationToUpdateMock)).thenReturn(fireStationUpdatedMock);
 
         String content = objectWriter.writeValueAsString(fireStationUpdatedMock);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/firestation")
+        MvcResult mockRequest = mockMvc .perform(put("/firestation")
                         .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                                        .content(content);
-        mockMvc.perform(mockRequest)
-                        .andExpect(status().is(201));
+                                        .content(content))
+                        .andExpect(status().is(201)).andReturn();
 
     }
 
 
     @Test
     void testDeleteFirestation() throws Exception {
-        mockMvc.perform(delete("/firestation"))
-                .andDo(print())
-                .andExpect(status().isOk());
+        mockMvc.perform(delete("/firestation")
+                        .param("address", "101 Av")
+                        .param("stationNumber", "4"))
+                .andExpect(status().isGone()).andReturn();
+        verify(fireStationServiceImpl).deleteFirestation("101 Av", "4");
     }
 
 
