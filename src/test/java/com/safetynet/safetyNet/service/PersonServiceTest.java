@@ -1,7 +1,10 @@
 package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.dao.IPersonDao;
+import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +31,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
- class IPersonServiceTest {
+ class PersonServiceTest {
 
     @LocalServerPort
     int randomServerPort;
@@ -42,6 +48,32 @@ import static org.mockito.Mockito.*;
     @InjectMocks
     PersonServiceImpl personServiceImplMock;
 
+    List<Person> personList;
+    @BeforeEach
+    void data() {
+        personList = new ArrayList<>( Arrays.asList(
+                new Person("James", "McAvoy", "101 Av", "NY", "87456", "5787-878", "james@gmail.com"),
+                new Person("Ed", "Norton", "101 Av", "NY", "87456", "5787-878", "edNorton@gmail.com"),
+                new Person("James", "Franco", "101 Av", "NY", "87456", "5787-878", "jamesFranco@gmail.com")
+        ));
+
+
+    }
+
+    @Test
+    @DisplayName("test getAllPersons")
+    void testGetAllPerson() {
+        List<Person> expected = new ArrayList<>(Arrays.asList(
+                new Person("James", "McAvoy", "101 Av", "NY", "87456", "5787-878", "james@gmail.com"),
+                new Person("Ed", "Norton", "101 Av", "NY", "87456", "5787-878", "edNorton@gmail.com"),
+                new Person("James", "Franco", "101 Av", "NY", "87456", "5787-878", "jamesFranco@gmail.com")));
+
+        when(iPersonDaoMock.findAll()).thenReturn(personList);
+
+        List<Person> result = personServiceImplMock.getAllPerson();
+
+        assertEquals(expected, result);
+    }
 
 
     @Test
