@@ -45,7 +45,7 @@ public class MedicalRecordsController {
 
     }
 
-    @PutMapping("/medicalRecord")
+    @PutMapping("/medicalRecord/{lastName}{firstName}")
     public ResponseEntity<MedicalRecords> updateMedicalRecord(@RequestBody MedicalRecords medicalRecords) {
 
         MedicalRecords medicalRecordsUpdate = medicalRecordService.updateMedicalRecord(medicalRecords);
@@ -56,7 +56,7 @@ public class MedicalRecordsController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{lastName}")
+                .path("/medicalRecord/{lastName}{firstName}")
                 .buildAndExpand(medicalRecordsUpdate.getLastName() + medicalRecordsUpdate.getFirstName())
                 .toUri();
         return ResponseEntity.created(location).build();
