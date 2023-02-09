@@ -1,8 +1,11 @@
 package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.dao.IMedicalRecordsDao;
+import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 import static org.junit.Assert.assertEquals;
@@ -29,7 +34,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-class IMedicalRecordServiceTest {
+class MedicalRecordServiceTest {
 
     @LocalServerPort
     int randomServerPort;
@@ -48,6 +53,33 @@ class IMedicalRecordServiceTest {
     MedicalRecordServiceImpl medicalRecordServiceImplMock;
 
 
+
+    List<MedicalRecords> medicalRecordsList;
+    @BeforeEach
+    void data() {
+        medicalRecordsList  = new ArrayList<>(Arrays.asList(
+                new MedicalRecords("John", "Rambo", "20/01/1554", new ArrayList<>(), new ArrayList<>()),
+                new MedicalRecords("James", "Cameron", "25/02/1997", new ArrayList<>(), new ArrayList<>()),
+                new MedicalRecords("Juan", "Perdomo", "21/05/1994", new ArrayList<>(), new ArrayList<>())
+        ));
+
+    }
+
+    @Test
+    @DisplayName("test getAllMedicalRecords")
+    void testGetAllMedicalRecors() {
+        List<MedicalRecords> expected = new ArrayList<>(Arrays.asList(
+                new MedicalRecords("John", "Rambo", "20/01/1554", new ArrayList<>(), new ArrayList<>()),
+                new MedicalRecords("James", "Cameron", "25/02/1997", new ArrayList<>(), new ArrayList<>()),
+                new MedicalRecords("Juan", "Perdomo", "21/05/1994", new ArrayList<>(), new ArrayList<>())
+        ));
+
+        when(iMedicalRecordsDaoMock.findAll()).thenReturn(medicalRecordsList);
+
+        List<MedicalRecords> result = medicalRecordServiceImplMock.getAllMedicalrecord();
+
+        assertEquals(expected, result);
+    }
 
 
     @Test
