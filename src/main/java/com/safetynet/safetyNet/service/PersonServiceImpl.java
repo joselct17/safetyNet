@@ -5,6 +5,8 @@ import com.safetynet.safetyNet.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersonServiceImpl implements IPersonService {
 
@@ -39,5 +41,10 @@ public class PersonServiceImpl implements IPersonService {
             throw new RuntimeException(ex);
         }
 
+    }
+
+    @Override
+    public List<Person> getAllPerson() {
+        return personDao.findAll();
     }
 }
