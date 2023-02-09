@@ -93,10 +93,10 @@ public class PersonDaoImpl implements IPersonDao {
     }
 
     @Override
-    public void delete(String firstname, String lastname) {
+    public void delete(String firstName, String lastName) {
             jsonReader.listPersons.removeIf
-                    (person -> (person.getFirstName().equals(firstname)
-                            &&person.getLastName().equals(lastname)));
+                    (person -> (person.getFirstName().equals(firstName)
+                            && person.getLastName().equals(lastName)));
 
     }
 
