@@ -2,6 +2,8 @@ package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.model.FireStation;
 
+import java.util.List;
+
 public interface IFireStationService {
 
     FireStation saveFirestation(FireStation fireStation);
@@ -12,5 +14,5 @@ public interface IFireStationService {
     void deleteFirestation(String address, String stationNumber);
 
 
-
+    List<FireStation> getAllFirestation();
 }
