@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class MedicalRecordServiceImpl implements IMedicalRecordService{
@@ -47,5 +49,10 @@ public class MedicalRecordServiceImpl implements IMedicalRecordService{
             logger.debug("Technical error deleting medicalrecord {} {}", firstName, lastName);
             throw new RuntimeException(ex);
         }
+    }
+
+    @Override
+    public List<MedicalRecords> getAllMedicalrecord() {
+        return medicalRecordsDao.findAll();
     }
 }
