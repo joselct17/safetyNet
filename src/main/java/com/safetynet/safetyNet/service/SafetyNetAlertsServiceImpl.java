@@ -262,14 +262,23 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
             for ( Person person : personsList) {
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
 
+                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+
                 LinkedHashMap<String, String> people = new LinkedHashMap<>();
 
                 people.put("Firstname", person.getFirstName());
                 people.put("Lastname", person.getLastName());
                 people.put("Phone", person.getTelephone());
                 people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
-                people.put("Medications", medicalRecords.getMedication().toString());
-                people.put("Allergies", medicalRecords.getAllergies().toString());
+
+
+
+                LinkedHashMap<String, List> medical = new LinkedHashMap<>();
+                medical.put("Medication", medicalRecords.getMedication());
+                medical.put("Allergies", medicalRecords.getAllergies());
+
+                result.put("Person", people);
+                result.put("Medical", medical);
 
                 list.add(people);
             }
