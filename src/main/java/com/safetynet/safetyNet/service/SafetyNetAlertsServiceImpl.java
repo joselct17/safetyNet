@@ -186,7 +186,6 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 medical.put("Medication", medicalRecords.getMedication());
                 medical.put("Allergies", medicalRecords.getAllergies());
 
-
                 result.put("Person", people);
                 result.put("Medical", medical);
 
@@ -210,6 +209,9 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
 
+
+                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+
                 LinkedHashMap<String, String> people = new LinkedHashMap<>();
 
                 people.put("Firstname", p.getFirstName());
@@ -217,10 +219,16 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 people.put("Address", p.getAddress());
                 people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
                 people.put("Email", p.getEmail());
-                people.put("Medications", medicalRecords.getMedication().toString());
-                people.put("Allergies", medicalRecords.getAllergies().toString());
 
-                list.add(people);
+
+                LinkedHashMap<String, List> medical = new LinkedHashMap<>();
+                medical.put("Medication", medicalRecords.getMedication());
+                medical.put("Allergies", medicalRecords.getAllergies());
+
+                result.put("Person", people);
+                result.put("Medical", medical);
+
+                list.add(result);
 
             }
         }
