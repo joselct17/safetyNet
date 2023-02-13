@@ -27,9 +27,9 @@ public class SafetyNetAlertsController {
     private static final Logger logger = LoggerFactory.getLogger(SafetyNetAlertsController.class);
 
 
-    //http://localhost:8080/firestation?stationNumber=%3Cstation_number
-    @GetMapping("/firestation/{stationNumber}")
-    public ResponseEntity<JSONObject>  peopleByFireStation(@PathVariable String stationNumber) {
+    //http://localhost:8080/firestation?stationNumber=<station_number>
+    @GetMapping("/firestations")
+    public ResponseEntity<JSONObject>  peopleByFireStation(@RequestParam String stationNumber) {
         logger.info("GET /fire called");
 
         JSONObject object = new JSONObject();
@@ -42,11 +42,12 @@ public class SafetyNetAlertsController {
 
     }
 
-    //http://localhost:8080/childAlert?address=%3Caddress
-    @GetMapping("/childAlert/{address}")
-    public ResponseEntity <JSONObject> childsAlert(@PathVariable String address) throws ParseException {
+    //http://localhost:8080/childAlert?address=<address>
+    @GetMapping("/childAlert")
+    public ResponseEntity <JSONObject> childsAlert(@RequestParam String address) throws ParseException {
         logger.info("GET /childAlert called");
 
+        // corriger probleme, pas d'enfant dans l'adress,
         JSONObject object = new JSONObject();
         JSONArray result = new JSONArray();
         result.add(safetyNetAlertsService.getChildsByAddress(address));
@@ -56,9 +57,9 @@ public class SafetyNetAlertsController {
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
-    //http://localhost:8080/phoneAlert?firestation=%3Cfirestation_number
-    @GetMapping("/phoneAlert/{stationNumber}")
-    public ResponseEntity<JSONObject> phoneNumber(@PathVariable String stationNumber) {
+    //http://localhost:8080/phoneAlert?firestation=<firestation_number>
+    @GetMapping("/phoneAlert")
+    public ResponseEntity<JSONObject> phoneNumber(@RequestParam String stationNumber) {
         logger.info("GET /phoneAlert called");
 
         JSONObject object = new JSONObject();
@@ -72,8 +73,8 @@ public class SafetyNetAlertsController {
 
 
     //http://localhost:8080/fire?address=<address>
-    @GetMapping("/fire/{address}")
-    public ResponseEntity <JSONObject> peopleByFirestationAddress (@PathVariable String address){
+    @GetMapping("/fire")
+    public ResponseEntity <JSONObject> peopleByFirestationAddress (@RequestParam String address){
         logger.info("GET /fire call");
 
         JSONObject object = new JSONObject();
@@ -86,9 +87,10 @@ public class SafetyNetAlertsController {
     }
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+//CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
+    @GetMapping("/flood")
+    public ResponseEntity<JSONObject> peopleByStationNumber(@RequestParam List<String> stationNumberList) {
 
-    @GetMapping("/flood/{stationNumberList}")
-    public ResponseEntity<JSONObject> peopleByStationNumber(@PathVariable List<String> stationNumberList) {
         logger.info("GET /flood called");
 
         JSONObject object = new JSONObject();
@@ -102,10 +104,10 @@ public class SafetyNetAlertsController {
     }
 
     //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
-    @GetMapping("/personInfo/{firstName}+{lastName}")
-    public ResponseEntity<JSONObject> peopleByName(@PathVariable String firstName, @PathVariable String lastName) {
+    @GetMapping("/personInfo")
+    public ResponseEntity<JSONObject> peopleByName(@RequestParam String firstName, @RequestParam String lastName) {
         logger.info("GET /personInfo called");
-
+//donc corriger url, si John Boyd seulement jhon boyd doit etre envoyé, si seulement on met Boyd tous les boyds doievent apparaitre
         JSONObject object = new JSONObject();
         JSONArray result = new JSONArray();
         result.add(safetyNetAlertsService.getPeopleByName(firstName,lastName));
@@ -119,8 +121,8 @@ public class SafetyNetAlertsController {
 
 
     //http://localhost:8080/communityEmail?city=<city>
-    @GetMapping("/communityEmail/{city}")
-    public ResponseEntity<JSONObject> peopleByCity(@PathVariable String city) {
+    @GetMapping("/communityEmail")
+    public ResponseEntity<JSONObject> peopleByCity(@RequestParam String city) {
         logger.info("GET /communityEmail called");
 
         JSONObject object = new JSONObject();
