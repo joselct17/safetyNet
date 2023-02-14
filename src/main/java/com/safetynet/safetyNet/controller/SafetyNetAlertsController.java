@@ -88,7 +88,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 //CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
-    @GetMapping("/flood")
+    @GetMapping("/flood/stations/")
     public ResponseEntity<JSONObject> peopleByStationNumber(@RequestParam List<String> stationNumberList) {
 
         logger.info("GET /flood called");
