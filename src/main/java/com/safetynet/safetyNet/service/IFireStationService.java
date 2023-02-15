@@ -13,6 +13,8 @@ public interface IFireStationService {
 
     void deleteFirestation(String address, String stationNumber);
 
+    void deleteFirestationByAddress(String address);
 
+    void deleteFirestationByNumber(String stationNumber);
     List<FireStation> getAllFirestation();
 }
