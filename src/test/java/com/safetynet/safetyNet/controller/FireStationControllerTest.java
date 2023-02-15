@@ -26,7 +26,9 @@ import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -67,7 +69,7 @@ class FireStationControllerTest {
     void testPostFirestation() throws Exception {
 
         FireStation fireStationMock = new FireStation("101 Av", "5");
-        Mockito.when(fireStationServiceImpl.saveFirestation(fireStationMock)).thenReturn(fireStationMock);
+        when(fireStationServiceImpl.saveFirestation(fireStationMock)).thenReturn(fireStationMock);
         String content = objectWriter.writeValueAsString(fireStationMock);
         MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/firestation")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,29 +82,39 @@ class FireStationControllerTest {
     @Test
     void testPutFirestation() throws Exception {
 
-        FireStation fireStationToUpdateMock = new FireStation("101 Av", "4");
+        FireStation fireStationToUpdate = new FireStation("101 Av", "4");
 
-        FireStation fireStationUpdatedMock = new FireStation("200 Av", "5");
+        String jsonContent = objectMapper.writeValueAsString(fireStationToUpdate);
 
-        Mockito.when(fireStationServiceImpl.updateFirestation(fireStationToUpdateMock)).thenReturn(fireStationUpdatedMock);
+        FireStation fireStationUpdated = new FireStation("200 Av", "5");
 
-        String content = objectWriter.writeValueAsString(fireStationUpdatedMock);
+        when(fireStationServiceImpl.updateFirestation(any(FireStation.class))).thenReturn(fireStationUpdated);
 
-        MvcResult mockRequest = mockMvc .perform(put("/firestation")
+
+
+        mockMvc .perform(put("/firestation")
                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(content))
+                                        .content(jsonContent))
                         .andExpect(status().is(201)).andReturn();
 
     }
 
 
     @Test
-    void testDeleteFirestation() throws Exception {
+    void testDeleteFirestationByAddress() throws Exception {
         mockMvc.perform(delete("/firestation")
-                        .param("address", "101 Av")
+                        .param("address", "101 Av"))
+                .andExpect(status().isGone()).andReturn();
+        verify(fireStationServiceImpl).deleteFirestationByAddress("101 Av");
+    }
+
+
+    @Test
+    void testDeleteFirestationByStationNumber() throws Exception {
+        mockMvc.perform(delete("/firestation")
                         .param("stationNumber", "4"))
                 .andExpect(status().isGone()).andReturn();
-        verify(fireStationServiceImpl).deleteFirestation("101 Av", "4");
+        verify(fireStationServiceImpl).deleteFirestationByNumber( "4");
     }
 
 
