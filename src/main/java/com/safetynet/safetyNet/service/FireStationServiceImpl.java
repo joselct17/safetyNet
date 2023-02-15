@@ -42,6 +42,26 @@ public class FireStationServiceImpl implements IFireStationService{
     }
 
     @Override
+    public void deleteFirestationByAddress(String address) {
+        try {
+            fireStationDao.deleteByAddress(address);
+        }catch (Exception ex) {
+            throw new RuntimeException();
+        }
+
+
+    }
+
+    @Override
+    public void deleteFirestationByNumber(String stationNumber) {
+        try{
+            fireStationDao.deleteByStationNumber(stationNumber);
+        }catch (Exception ex) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
     public List<FireStation> getAllFirestation() {
         return fireStationDao.findAll();
     }
