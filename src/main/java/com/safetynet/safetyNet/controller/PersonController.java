@@ -53,7 +53,7 @@ public class PersonController {
 
     }
 
-    @PutMapping("/person/{lastName}{firstName}")
+    @PutMapping("/person")
     public ResponseEntity<Person> updatePerson(@RequestBody Person person) throws Exception {
 
        Person personUpdate = personService.updatePerson(person);
@@ -64,7 +64,7 @@ public class PersonController {
 
        URI location = ServletUriComponentsBuilder
                .fromCurrentRequest()
-               .path("/{lastName}{firstName}")
+               .path("/person")
                .buildAndExpand(personUpdate.getLastName()+personUpdate.getFirstName())
                .toUri();
        return ResponseEntity.created(location).build();
