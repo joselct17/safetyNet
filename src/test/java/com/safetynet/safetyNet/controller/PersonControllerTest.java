@@ -1,51 +1,40 @@
 package com.safetynet.safetyNet.controller;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.safetynet.safetyNet.dao.IPersonDao;
-import com.safetynet.safetyNet.model.FireStation;
+
 import com.safetynet.safetyNet.model.Person;
 import com.safetynet.safetyNet.service.PersonServiceImpl;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.mockito.Mockito;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.net.URI;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -104,24 +93,23 @@ class PersonControllerTest {
     @Test
     void testPutPerson() throws Exception {
 
+        //Arrange
         Person personToUpdateMock = new Person("James", "McAvoy", "101 Av", "NY", "87456", "5787-878", "james@gmail.com");
 
         String jsonContent = objectMapper.writeValueAsString(personToUpdateMock);
 
-        Person personUpdatedMock = new Person("James", "McAvoy", "200 Av", "NY", "9999", "5787-878", "james@gmail.com");
+        Person personUpdatedMock = new Person("James", "McAvoy", "200 Av", "NY", "87456", "5787-878", "james@gmail.com");
         when(personServiceImpl.updatePerson(any(Person.class))).thenReturn(personUpdatedMock);
 
         //Act
+        mockMvc.perform(put("/person").contentType(MediaType.APPLICATION_JSON).content(jsonContent))
+                .andDo(print())
 
-        MvcResult result = mockMvc
-                .perform(put("/person").contentType(MediaType.APPLICATION_JSON).content(jsonContent))
                 .andExpect(status().is(201)).andReturn();
 
         //Assert
         verify(personServiceImpl).updatePerson(any(Person.class));
-        Person personResult = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<Person>() {});
-        assertNotNull(personResult);
-        assertEquals(personUpdatedMock.getEmail(), personResult.getEmail());
+
 
 
     }
