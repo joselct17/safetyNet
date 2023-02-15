@@ -64,14 +64,6 @@ public class FireStationDaoImpl implements IFireStationDao {
         return fireStation;
     }
 
-    @Override
-    public void  delete(String address, String stationNumber) {
-
-        jsonReader.listFireStation.removeIf(fireStation ->
-                (fireStation.getStationNumber().equals(stationNumber)
-                        && fireStation.getAddress().equals(address)));
-
-    }
 
     @Override
     public void deleteByAddress(String address) {
