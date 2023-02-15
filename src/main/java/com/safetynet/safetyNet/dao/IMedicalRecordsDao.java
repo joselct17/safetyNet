@@ -14,7 +14,7 @@ public interface IMedicalRecordsDao {
     MedicalRecords save(MedicalRecords medicalRecords);
 
 
-    MedicalRecords update(MedicalRecords medicalRecords);
+    void update(MedicalRecords medicalRecords);
 
     void delete(String firstName, String lastName);
 
