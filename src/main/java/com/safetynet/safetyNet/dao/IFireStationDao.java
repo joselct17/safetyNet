@@ -18,7 +18,6 @@ public interface IFireStationDao {
 
     FireStation update(FireStation fireStation);
 
-    void delete(String address, String stationNumber);
 
     void deleteByAddress(String address);
 
