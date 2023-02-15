@@ -1,7 +1,6 @@
 package com.safetynet.safetyNet.service;
 
 import com.safetynet.safetyNet.dao.IPersonDao;
-import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,8 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -105,6 +103,20 @@ import static org.mockito.Mockito.*;
         assertEquals(personUpdated, result);
         verify(iPersonDaoMock, times(1)).update(any(Person.class));
     }
+
+
+    @Test
+    @DisplayName("Update Person: fail cause Exeption")
+    void testUpdatePerson_BusinessResourceException() throws RuntimeException {
+        //Arrange
+        Person personToUpdate = new Person("Lola", "Flores", "10 Rue de Madrid", "Madrid", "78855", "345669", "lola@gmail.com");
+
+        when(iPersonDaoMock.getByName("Lola", "Flores")).thenThrow(RuntimeException.class);
+
+        //Act
+        assertThrows(Exception.class,()->personServiceImplMock.updatePerson(personToUpdate));
+    }
+
 
     @Test
     void testDeletePerson() {
