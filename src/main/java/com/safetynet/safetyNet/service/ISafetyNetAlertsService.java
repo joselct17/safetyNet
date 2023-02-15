@@ -26,7 +26,7 @@ public interface ISafetyNetAlertsService {
     ArrayList<HashMap> getPeopleByName(String firstName, String lastName);
 
 
-    ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList( List<String> stationNumberList );
+    ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList );
 
 
 
