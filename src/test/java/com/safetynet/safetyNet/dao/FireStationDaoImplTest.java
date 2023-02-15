@@ -34,7 +34,7 @@ public class FireStationDaoImplTest {
     @BeforeEach
     void initializeData() {
 
-        ArrayList<FireStation> dataInitialList = new ArrayList<> (Arrays.asList(
+        ArrayList<FireStation> dataInitialList = new ArrayList<>(Arrays.asList(
                 new FireStation("address1", "6"),
                 new FireStation("address2", "7"),
                 new FireStation("address3", "8")
@@ -60,9 +60,9 @@ public class FireStationDaoImplTest {
 
     @Test
     @DisplayName("Test getByStationnumber")
-    void testGetByStationnumber()  throws Exception {
+    void testGetByStationnumber() throws Exception {
         //Arrange
-        List<FireStation> expectedList = new ArrayList<> (Arrays.asList(
+        List<FireStation> expectedList = new ArrayList<>(Arrays.asList(
                 new FireStation("address1", "6")
         ));
 
@@ -70,8 +70,8 @@ public class FireStationDaoImplTest {
         List<FireStation> objectList = fireStationDaoCUT.getByStationNumber("6");
 
         //Assert
-        assertEquals(1,objectList.size(),"Expected list size is 3");
-        assertEquals(expectedList,objectList,"Returned list must one Firestation");
+        assertEquals(1, objectList.size(), "Expected list size is 3");
+        assertEquals(expectedList, objectList, "Returned list must one Firestation");
     }
 
     @Test
@@ -83,7 +83,61 @@ public class FireStationDaoImplTest {
         String result = fireStationDaoCUT.getByAddress("adressUnknown");
 
         //Assert
-        assertNull(result,"Returned value must be null");
+        assertNull(result, "Returned value must be null");
+    }
+
+    @Test
+    @DisplayName("Delete by station Number")
+    void testDeleteByStationNumber() throws Exception {
+
+        //Arrange
+        ArrayList<FireStation> dataInitialList = new ArrayList<>(Arrays.asList(
+                new FireStation("adress1", "1"),
+                new FireStation("adress2", "2"),
+                new FireStation("adress3", "3"),
+                new FireStation("adress4", "1")
+        ));
+        fireStationDaoCUT.setFireStationList(dataInitialList);
+
+
+        List<FireStation> expectedList = new ArrayList<>(Arrays.asList(
+                new FireStation("adress2", "2"),
+                new FireStation("adress3", "3")
+        ));
+
+
+        //Act
+        fireStationDaoCUT.deleteByStationNumber("1");
+        List<FireStation> finalList = fireStationDaoCUT.findAll();
+
+        //ASSERT
+
+        assertEquals(2, finalList.size());
+        assertEquals(expectedList, finalList);
+
+
+    }
+
+    @Test
+    @DisplayName("Delete by address")
+    void testDeleteByAddress() throws Exception {
+
+
+        List<FireStation> expectedList = new ArrayList<>(Arrays.asList(
+                new FireStation("address2", "7"),
+                new FireStation("address3", "8")
+        ));
+
+
+        //Act
+        fireStationDaoCUT.deleteByAddress("address1");
+        List<FireStation> finalList = fireStationDaoCUT.findAll();
+
+        //ASSERT
+
+        assertEquals(2, finalList.size());
+        assertEquals(expectedList, finalList);
+
     }
 
 
