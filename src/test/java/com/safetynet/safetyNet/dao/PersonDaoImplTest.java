@@ -104,4 +104,24 @@ public class PersonDaoImplTest {
 
     }
 
+
+    @Test
+    @DisplayName("Test delete Person")
+    void testDeletePerson() {
+
+        ArrayList<Person> expectedList = new ArrayList<> (Arrays.asList(
+                new Person("John","Doe","address1", "Varadero", "1111", "888888888", "johndoe@mail.com"),
+                new Person("Mike","Doe","address1", "Varadero", "2222", "99999999", "mikedoe@mail.com")
+        ));
+
+        personDaoCUT.delete("Eric", "Monson");
+        List<Person> finalList = personDaoCUT.findAll();
+
+
+        assertEquals(2,finalList.size() );
+        assertEquals(expectedList, finalList);
+
+
+    }
+
 }
