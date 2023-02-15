@@ -32,14 +32,7 @@ public class FireStationServiceImpl implements IFireStationService{
         }
     }
 
-    @Override
-    public void deleteFirestation(String address, String stationNumber) {
-        try {
-            fireStationDao.delete(address, stationNumber);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-    }
+
 
     @Override
     public void deleteFirestationByAddress(String address) {
