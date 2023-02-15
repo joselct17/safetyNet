@@ -88,8 +88,8 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
 //CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
-    @GetMapping("/flood/stations/")
-    public ResponseEntity<JSONObject> peopleByStationNumber(@RequestParam List<String> stationNumberList) {
+    @GetMapping("/flood/stations/{stationNumberList}")
+    public ResponseEntity<JSONObject> peopleByStationNumber(@PathVariable List<Integer> stationNumberList) {
 
         logger.info("GET /flood called");
 
@@ -105,7 +105,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
     @GetMapping("/personInfo")
-    public ResponseEntity<JSONObject> peopleByName(@RequestParam String firstName, @RequestParam String lastName) {
+    public ResponseEntity<JSONObject> peopleByName(@RequestParam(required = false) String firstName, @RequestParam String lastName) {
         logger.info("GET /personInfo called");
 //donc corriger url, si John Boyd seulement jhon boyd doit etre envoyé, si seulement on met Boyd tous les boyds doievent apparaitre
         JSONObject object = new JSONObject();
