@@ -76,11 +76,20 @@ public class FireStationController {
     }
 
 
-    @DeleteMapping("/firestation")
-    public ResponseEntity<FireStation> daleteFirestation(@RequestParam(required = true) String address, @RequestParam(required = true) String stationNumber) {
-        fireStationService.deleteFirestation(address, stationNumber);
+    @DeleteMapping(value = "/firestation", params = "stationNumber")
+    public ResponseEntity<FireStation> deleteFirestationByStationNumber( @RequestParam String stationNumber) {
+        fireStationService.deleteFirestationByNumber(stationNumber);
 
         return new ResponseEntity<>(HttpStatus.GONE);
     }
+
+    @DeleteMapping(value = "/firestation", params = "address")
+    public ResponseEntity<FireStation> deleteFirestationByAddress(@RequestParam String address) {
+        fireStationService.deleteFirestationByAddress(address);
+
+        return new ResponseEntity<>(HttpStatus.GONE);
+    }
+
+
 
 }
