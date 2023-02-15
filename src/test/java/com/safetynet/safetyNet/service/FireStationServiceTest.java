@@ -113,11 +113,20 @@ public class FireStationServiceTest {
 
 
     @Test
-    void testDeletePerson() {
+    void testDeleteFirestationByAddress() {
 
-        doNothing().when(iFireStationDaoMock).delete("101 Av", "3");
-        fireStationServiceImplMock.deleteFirestation("101 Av", "3");
-        verify(iFireStationDaoMock, times(1)).delete("101 Av", "3");
+        doNothing().when(iFireStationDaoMock).deleteByAddress("101 Av");
+        fireStationServiceImplMock.deleteFirestationByAddress("101 Av");
+        verify(iFireStationDaoMock, times(1)).deleteByAddress("101 Av");
+
+    }
+
+    @Test
+    void testDeleteFirestationByStationNumber() {
+
+        doNothing().when(iFireStationDaoMock).deleteByStationNumber("3");
+        fireStationServiceImplMock.deleteFirestationByNumber("3");
+        verify(iFireStationDaoMock, times(1)).deleteByStationNumber("3");
 
     }
 }
