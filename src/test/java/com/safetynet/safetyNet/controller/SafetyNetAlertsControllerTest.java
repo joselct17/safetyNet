@@ -41,14 +41,14 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void  testPeopleByFirestation() throws Exception {
-        mockMvc.perform(get("/firestation/3"))
+        mockMvc.perform(get("/firestation?stationNumber=3"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void  childsAlert() throws Exception {
-        mockMvc.perform(get("/childAlert/101 Gotham City"))
+        mockMvc.perform(get("/childAlert?address=101 Gotham City"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -56,28 +56,28 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void phoneNumber() throws Exception {
-        mockMvc.perform(get("/phoneAlert/2"))
+        mockMvc.perform(get("/phoneAlert?stationNumber=3"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void peopleByFirestationAddress() throws Exception {
-        mockMvc.perform(get("/fire/200 Rue du Martre"))
+        mockMvc.perform(get("/fire?address=101 Ave 12"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void peopleByStationNumber() throws Exception {
-        mockMvc.perform(get("/flood/2"))
+        mockMvc.perform(get("/flood/stations/2,3"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void peopleByName() throws Exception {
-        mockMvc.perform(get("/personInfo/Bruce+Wayne"))
+        mockMvc.perform(get("/personInfo?firstName=<Bruce>&lastName=<Wayne>"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -85,7 +85,7 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void testGetEmailsInCity() throws Exception {
-        mockMvc.perform(get("/communityEmail/Culver"))
+        mockMvc.perform(get("/communityEmail?city=Culver"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
