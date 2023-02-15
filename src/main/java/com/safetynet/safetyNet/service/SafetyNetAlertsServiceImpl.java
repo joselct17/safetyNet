@@ -6,7 +6,6 @@ import com.safetynet.safetyNet.dao.IPersonDao;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,20 +76,25 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 childs.put("Lastname", person.getLastName());
                 childs.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
+               // list.add(childs);
 
-                list.add(childs);
+                LinkedHashMap<String, String> adults = new LinkedHashMap<>();
+                personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
+                    adults.put("Firstname", p2.getFirstName());
+                    adults.put("Lastname", p2.getLastName());
+
+                   // list.add(adults);
+
+                });
+//UN SEUL ADULTE EST ENVOYE
+                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+                result.put("Child",childs );
+                result.put("Adults", adults);
+
+                list.add(result);
             }
         }
-        Person person = new Person();
-        personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
 
-            LinkedHashMap<String, String> adults = new LinkedHashMap<>();
-            adults.put("Firstname", p2.getFirstName());
-            adults.put("Lastname", p2.getLastName());
-
-            list.add(adults);
-
-        });
         return list;
     }
 
@@ -186,8 +190,9 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 medical.put("Medication", medicalRecords.getMedication());
                 medical.put("Allergies", medicalRecords.getAllergies());
 
-                result.put("Person", people);
-                result.put("Medical", medical);
+
+                result.putAll( people);
+                result.putAll( medical);
 
             list.add(result);
 
@@ -203,6 +208,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
         ArrayList<HashMap> list = new ArrayList<>();
 
         Person person = personDao.getByName(firstName, lastName);
+
 
         if (person!= null) {
             for (Person p: personDao.getByLastName(person.getLastName())) {
@@ -225,8 +231,8 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 medical.put("Medication", medicalRecords.getMedication());
                 medical.put("Allergies", medicalRecords.getAllergies());
 
-                result.put("Person", people);
-                result.put("Medical", medical);
+                result.putAll(people);
+                result.putAll(medical);
 
                 list.add(result);
 
@@ -238,27 +244,35 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     }
 
     @Override
-    public ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList(List<String> stationNumberList) {
+    public ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList) {
+
+        LinkedHashMap<String, Object> obj = new LinkedHashMap<>();
 
         ArrayList<HashMap> list = new ArrayList<>();
 
-    for (String i : stationNumberList ) {
 
-        LinkedHashMap<String, String> fireStations = new LinkedHashMap<>();
+    for (Integer i : stationNumberList ) {
 
+
+        LinkedHashMap<String, Integer> fireStations = new LinkedHashMap<>();
         fireStations.put("StationNumber", i);
-
-        List<FireStation> fireStationList = fireStationDao.getByStationNumber(i);
-
         list.add(fireStations);
+
+
+
+        List<FireStation> fireStationList = fireStationDao.getByStationNumber(String.valueOf(i));
+
+
         for (FireStation fireStation : fireStationList) {
 
             LinkedHashMap<String, String> addressList = new LinkedHashMap<>();
-
             addressList.put("address", fireStation.getAddress());
+            list.add( addressList);
+
+
+
             List<Person> personsList = personDao.getByAddress(fireStation.getAddress());
 
-            list.add(addressList);
             for ( Person person : personsList) {
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
 
@@ -272,19 +286,20 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
 
-
                 LinkedHashMap<String, List> medical = new LinkedHashMap<>();
                 medical.put("Medication", medicalRecords.getMedication());
                 medical.put("Allergies", medicalRecords.getAllergies());
 
-                result.put("Person", people);
-                result.put("Medical", medical);
+                result.putAll(people);
+                result.putAll(medical);
 
-                list.add(people);
+
+                list.add(result);
             }
         }
 
     }
+
 
 
         return list;
