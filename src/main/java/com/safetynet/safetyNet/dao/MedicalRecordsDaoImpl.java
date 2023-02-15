@@ -2,6 +2,8 @@ package com.safetynet.safetyNet.dao;
 
 import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.MedicalRecords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 @Repository
 public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
 
-
+    private final Logger logger = LoggerFactory.getLogger(MedicalRecordsDaoImpl.class);
     @Autowired
     private final JsonReader jsonReader;
 
@@ -40,7 +42,14 @@ public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
         if (result.size()==1) {
             return result.get(0);
         }
-        else return null;
+        else if (result.isEmpty()) {
+            return null;
+        }
+        else {
+            logger.debug("Found {} Medicalrecords for {} {}",result.size(), firstName, lastName );
+            throw new IllegalStateException ("Found "+result.size()+" Medicalrecords for "+result.size()+
+                    " "+ firstName+" "+ lastName + ", but was expecting 1 Medicalrecord." );
+        }
     }
 
 
@@ -51,7 +60,7 @@ public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
     }
 
     @Override
-    public MedicalRecords update(MedicalRecords medicalRecords) {
+    public  void update(MedicalRecords medicalRecords) {
         for (MedicalRecords m : jsonReader.listMedicalRecords) {
             if (m.getFirstName().equals(medicalRecords.getFirstName()) && m.getLastName().equals(medicalRecords.getLastName())) {
                 m.setBirthDate (medicalRecords.getBirthDate());
@@ -59,8 +68,6 @@ public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
                 m.setAllergies(new ArrayList<>(medicalRecords.getAllergies()));
             }
         }
-
-        return medicalRecords;
 
     }
 
