@@ -45,19 +45,19 @@ public class MedicalRecordsController {
 
     }
 
-    @PutMapping("/medicalRecord/{lastName}{firstName}")
+    @PutMapping("/medicalRecord")
     public ResponseEntity<MedicalRecords> updateMedicalRecord(@RequestBody MedicalRecords medicalRecords) {
 
-        MedicalRecords medicalRecordsUpdate = medicalRecordService.updateMedicalRecord(medicalRecords);
+        MedicalRecords medicalRecordsUpdated = medicalRecordService.updateMedicalRecord(medicalRecords);
 
-        if (Objects.isNull(medicalRecordsUpdate)) {
+        if(Objects.isNull(medicalRecordsUpdated)) {
             return ResponseEntity.noContent().build();
         }
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/medicalRecord/{lastName}{firstName}")
-                .buildAndExpand(medicalRecordsUpdate.getLastName() + medicalRecordsUpdate.getFirstName())
+                .path("/medicalRecord")
+                .buildAndExpand(medicalRecordsUpdated.getLastName()+medicalRecordsUpdated.getFirstName())
                 .toUri();
         return ResponseEntity.created(location).build();
     }
