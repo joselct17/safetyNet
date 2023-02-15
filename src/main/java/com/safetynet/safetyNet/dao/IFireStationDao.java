@@ -20,4 +20,7 @@ public interface IFireStationDao {
 
     void delete(String address, String stationNumber);
 
+    void deleteByAddress(String address);
+
+    void deleteByStationNumber(String stationNumber);
 }
