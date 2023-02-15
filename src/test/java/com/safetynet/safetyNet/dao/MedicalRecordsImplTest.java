@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,5 +66,25 @@ public class MedicalRecordsImplTest {
 
         //Assert
         assertEquals(expected,result,"Returned Medical record must be same as expected");
+    }
+
+
+    @Test
+    @DisplayName("Delete MedicalRecord")
+    void testDeleteMedicalRecords() {
+
+        List<MedicalRecords> expectedList = new ArrayList<>(Arrays.asList(
+                new MedicalRecords("Kal", "El", "21/01/1992", new ArrayList<>(Arrays.asList("medoc1")), new ArrayList<>(Arrays.asList("allergie1"))),
+                new MedicalRecords("Barry", "Allen", "22/07/1999", new ArrayList<>(Arrays.asList("medoc1", "medoc2", "medoc2")), new ArrayList<>(Arrays.asList()))
+                ));
+
+
+        medicalRecordsDaoCUT.delete("Bruce", "Wayne");
+        List<MedicalRecords> finalList = medicalRecordsDaoCUT.findAll();
+
+
+        //ASSERT
+        assertEquals(2, finalList.size());
+        assertEquals(expectedList, finalList);
     }
 }
