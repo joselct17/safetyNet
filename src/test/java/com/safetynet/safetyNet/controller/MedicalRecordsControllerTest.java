@@ -10,10 +10,10 @@ import com.safetynet.safetyNet.model.MedicalRecords;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -29,12 +29,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
 import java.util.ArrayList;
@@ -61,7 +60,9 @@ class MedicalRecordsControllerTest {
     @MockBean
     MedicalRecordServiceImpl medicalRecordService;
 
+
     ObjectMapper objectMapper = new ObjectMapper();
+
 
     ObjectWriter objectWriter = objectMapper.writer();
 
@@ -105,34 +106,26 @@ class MedicalRecordsControllerTest {
 
     @Test
     void testPutMedicalRecords() throws Exception {
-
         MedicalRecords medicalRecordsToUpdate = new MedicalRecords("James", "McAvoy", "03/06/1984", new ArrayList<>(), new ArrayList<>());
-        String content = objectMapper.writeValueAsString(medicalRecordsToUpdate);
-        MedicalRecords medicalRecordsUpdated = new MedicalRecords("James", "McAvoy", "03/06/1995", new ArrayList<>(), new ArrayList<>());
 
+        String jsonContent = objectMapper.writeValueAsString(medicalRecordsToUpdate);
+
+        MedicalRecords medicalRecordsUpdated = new MedicalRecords("James", "McAvoy", "03/06/1984", new ArrayList<>(), new ArrayList<>());
         when(medicalRecordService.updateMedicalRecord(any(MedicalRecords.class))).thenReturn(medicalRecordsUpdated);
 
+
         //Act
-        MockHttpServletRequestBuilder  builder = MockMvcRequestBuilders
-                .put("/medicalRecord/")
+        mockMvc.perform(put("/medicalRecord")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content);
-
-
-
-
-        this.mockMvc.perform(builder)
-                .andExpect(MockMvcResultMatchers.status().is(201))
-                        .andExpect((ResultMatcher) MockMvcResultMatchers.content());
-
+                        .content(jsonContent))
+                .andDo(print())
+                .andExpect(status().is(201)).andReturn();
 
         //Assert
         verify(medicalRecordService).updateMedicalRecord(any(MedicalRecords.class));
-       // MedicalRecords medicalrecordResult = objectMapper.readValue(builder.getResponse().getContentAsString(), new TypeReference<MedicalRecords>() {});
-     //   assertNotNull(medicalrecordResult);
-    //    assertEquals(medicalRecordsUpdated, medicalrecordResult);
 
     }
+
 
 
     @Test
