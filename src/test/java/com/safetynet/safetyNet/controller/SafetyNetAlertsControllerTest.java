@@ -41,7 +41,7 @@ class SafetyNetAlertsControllerTest {
 
     @Test
     void  testPeopleByFirestation() throws Exception {
-        mockMvc.perform(get("/firestation?stationNumber=3"))
+        mockMvc.perform(get("/firestations?stationNumber=3"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
