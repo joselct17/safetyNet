@@ -138,5 +138,27 @@ public class FireStationDaoImplTest {
 
     }
 
+    @Test
+    @DisplayName("Update")
+    void test_Update() throws Exception {
+        //Arrange
+        List<FireStation> expectedList = new ArrayList<> (Arrays.asList(
+                new FireStation("address1", "6"),
+                new FireStation("address2", "7"),
+                new FireStation("address3", "8")));
+
+        FireStation incompleteFirestation1 = new FireStation();
+        FireStation incompleteFirestation2 = new FireStation(null,"1");
+        FireStation incompleteFirestation3 = new FireStation("address",null);
+
+        //ACT
+
+        fireStationDaoCUT.update(incompleteFirestation1);
+        fireStationDaoCUT.update(incompleteFirestation2);
+        fireStationDaoCUT.update(incompleteFirestation3);
+
+        assertEquals(expectedList, fireStationDaoCUT.findAll());
+    }
+
 
 }
