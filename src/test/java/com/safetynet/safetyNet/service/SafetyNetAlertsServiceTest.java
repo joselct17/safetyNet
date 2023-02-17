@@ -44,6 +44,8 @@ public class SafetyNetAlertsServiceTest {
 
     List<Person> personList;
     List<Person> personListAddress5;
+
+    List<Person>personListAddress4;
     List<Person> personListFamilyMcAvoy;
 
 
@@ -84,6 +86,10 @@ public class SafetyNetAlertsServiceTest {
                 new Person("James", "Franco", "103 Av", "NY", "87456", "5787-222", "jamesFranco@gmail.com")
 
                 ));
+        personListAddress4 = new ArrayList<>(Arrays.asList(
+                new Person("Ed", "Norton", "102 Av", "NY", "87456", "5787-999", "edNorton@gmail.com")
+
+        ));
 
 
 
@@ -189,25 +195,25 @@ public class SafetyNetAlertsServiceTest {
             ArrayList<HashMap> expected = new ArrayList<>();
 
             LinkedHashMap<String, String> people = new LinkedHashMap<>();
-            LinkedHashMap<String, String> count = new LinkedHashMap<>();
+            HashMap<String, Integer> count = new HashMap<>();
 
-            people.put("Firstname", "James");
-            people.put("Lastname", "Franco");
-            people.put("Address", "103 Av");
-            people.put("Phone", "5787-222");
+            people.put("Firstname", "Ed");
+            people.put("Lastname", "Norton");
+            people.put("Address", "102 Av");
+            people.put("Phone", "5787-999");
 
             expected.add(people);
 
-            count.put("Childs", "0");
-            count.put("Adults", "1");
+            count.put("Childs", 1);
+            count.put("Adults", 0);
             expected.add(count);
 
             //Act
-            when(iFireStationDao.getByStationNumber("5")).thenReturn(fireStationList);
-            when(iMedicalRecordsDao.getByName("James", "Franco")).thenReturn(JamesFrancoMedical);
-            when(iPersonDao.findAll()).thenReturn(personListAddress5);
+            when(iFireStationDao.getByStationNumber("4")).thenReturn(fireStationList);
+            when(iMedicalRecordsDao.getByName("Ed", "Norton")).thenReturn(EdNortonMedical);
+            when(iPersonDao.findAll()).thenReturn(personListAddress4);
 
-            ArrayList result = safetyNetAlertsService.getPeopleByStationNumber("5");
+            ArrayList result = safetyNetAlertsService.getPeopleByStationNumber("4");
 
             //Assert
             assertEquals(expected, result);
