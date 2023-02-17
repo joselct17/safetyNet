@@ -76,27 +76,27 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 childs.put("Lastname", person.getLastName());
                 childs.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
-               // list.add(childs);
+                list.add(childs);
 
-                LinkedHashMap<String, String> adults = new LinkedHashMap<>();
                 personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
+
+                    LinkedHashMap<String, String> adults = new LinkedHashMap<>();
                     adults.put("Firstname", p2.getFirstName());
                     adults.put("Lastname", p2.getLastName());
 
-                   // list.add(adults);
+                    list.add(adults);
 
                 });
-//UN SEUL ADULTE EST ENVOYE
-                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-                result.put("Child",childs );
-                result.put("Adults", adults);
-
-                list.add(result);
             }
         }
 
+
+
         return list;
     }
+
+
+
 
 
     @Override
