@@ -27,7 +27,7 @@ public class SafetyNetAlertsController {
     private static final Logger logger = LoggerFactory.getLogger(SafetyNetAlertsController.class);
 
 
-    //http://localhost:8080/firestation?stationNumber=<station_number>
+    //http://localhost:8080/firestations?stationNumber=<station_number>
     @GetMapping("/firestations")
     public ResponseEntity<JSONObject>  peopleByFireStation(@RequestParam String stationNumber) {
         logger.info("GET /fire called");
