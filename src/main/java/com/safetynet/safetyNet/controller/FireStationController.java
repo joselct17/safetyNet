@@ -60,7 +60,7 @@ public class FireStationController {
     @PutMapping("/firestation")
     public ResponseEntity<FireStation> updateFirestation(@RequestBody FireStation fireStation) {
 
-        logger.info("POST /firestation called");
+        logger.info("PUT /firestation called");
 
         FireStation fireStationUpdate = fireStationService.updateFirestation(fireStation);
 
@@ -73,6 +73,7 @@ public class FireStationController {
                 .path("/{stationNumber}")
                 .buildAndExpand(fireStationUpdate.getStationNumber())
                 .toUri();
+        logger.info("PUT /firestation response : 201");
         return ResponseEntity.created(location).build();
 
     }
@@ -80,15 +81,21 @@ public class FireStationController {
 
     @DeleteMapping(value = "/firestation", params = "stationNumber")
     public ResponseEntity<FireStation> deleteFirestationByStationNumber( @RequestParam String stationNumber) {
+
+        logger.info("DELETE stationNumber /firestation called");
         fireStationService.deleteFirestationByNumber(stationNumber);
 
+        logger.info("DELETE /firestation response GONE");
         return new ResponseEntity<>(HttpStatus.GONE);
     }
 
     @DeleteMapping(value = "/firestation", params = "address")
     public ResponseEntity<FireStation> deleteFirestationByAddress(@RequestParam String address) {
+
+        logger.info("DELETE address /firestation called");
         fireStationService.deleteFirestationByAddress(address);
 
+        logger.info("DELETE /firestation response GONE");
         return new ResponseEntity<>(HttpStatus.GONE);
     }
 
