@@ -3,6 +3,7 @@ package com.safetynet.safetyNet.json;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
+import com.safetynet.safetyNet.service.FloodResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -24,13 +25,16 @@ public class JsonReader {
 
     public ArrayList<MedicalRecords> listMedicalRecords;
 
+    public ArrayList<FloodResponse> listFloodResponse;
 
-    public JsonReader(ArrayList<Person> listPersons, ArrayList<FireStation> listFireStation, ArrayList<MedicalRecords> listMedicalRecords ) throws ParseException, IOException, FileNotFoundException {
+
+    public JsonReader(ArrayList<Person> listPersons, ArrayList<FireStation> listFireStation, ArrayList<MedicalRecords> listMedicalRecords , ArrayList<FloodResponse> listFloodResponse) throws ParseException, IOException, FileNotFoundException {
 
 
         this.listPersons = listPersons;
         this.listFireStation = listFireStation;
         this.listMedicalRecords = listMedicalRecords;
+        this.listFloodResponse = listFloodResponse;
 
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader("src/main/resources/JSON/data.JSON");
@@ -92,6 +96,36 @@ public class JsonReader {
 
 
         }
+
+        while (fire.hasNext()) {
+            JSONObject o = per.next();
+
+            FloodResponse floodResponse = new FloodResponse();
+            floodResponse.setAddress((String)o.get("address"));
+            floodResponse.setStationNumber((Integer) o.get("station"));
+            listFloodResponse.add(floodResponse);
+        }
+
+        while (per.hasNext()) {
+            JSONObject o = per.next();
+
+            FloodResponse floodResponse = new FloodResponse();
+            floodResponse.setFirstName((String)o.get("firstName"));
+            floodResponse.setLastName((String)o.get("lastName"));
+            floodResponse.setTelephone((String) o.get("phone"));
+            listFloodResponse.add(floodResponse);
+
+        }
+        while (medic.hasNext()) {
+            JSONObject o = medic.next();
+
+            FloodResponse floodResponse = new FloodResponse();
+            floodResponse.setBirthDate((String) o.get("birthdate"));
+            floodResponse.setMedication((ArrayList<String>) o.get("medications"));
+            floodResponse.setAllergies((ArrayList<String>) o.get("allergies"));
+            listFloodResponse.add(floodResponse);
+        }
+
     }
 
 }
