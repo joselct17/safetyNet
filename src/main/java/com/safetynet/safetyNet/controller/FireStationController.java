@@ -60,6 +60,8 @@ public class FireStationController {
     @PutMapping("/firestation")
     public ResponseEntity<FireStation> updateFirestation(@RequestBody FireStation fireStation) {
 
+        logger.info("POST /firestation called");
+
         FireStation fireStationUpdate = fireStationService.updateFirestation(fireStation);
 
         if(Objects.isNull(fireStationUpdate)) {
