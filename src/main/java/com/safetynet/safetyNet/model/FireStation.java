@@ -30,11 +30,5 @@ public class FireStation {
         this.stationNumber = stationNumber;
     }
 
-    @Override
-    public String toString() {
-        return "FireStation{" +
-                "address='" + address + '\'' +
-                ", stationNumber=" + stationNumber +
-                '}';
-    }
+
 }
