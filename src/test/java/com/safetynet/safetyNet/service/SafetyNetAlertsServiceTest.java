@@ -150,8 +150,8 @@ public class SafetyNetAlertsServiceTest {
             childs.put("Lastname", "Norton");
             childs.put("Age", "7");
 
-            total.put("Child",childs);
-            total.put("Adults" ,adults);
+            total.putAll(childs);
+
 
             expected.add(total);
 
