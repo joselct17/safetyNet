@@ -3,6 +3,7 @@ package com.safetynet.safetyNet.service;
 import com.safetynet.safetyNet.dao.IFireStationDao;
 import com.safetynet.safetyNet.dao.IMedicalRecordsDao;
 import com.safetynet.safetyNet.dao.IPersonDao;
+import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
@@ -30,6 +31,10 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     @Autowired
     private final IFireStationDao fireStationDao;
 
+
+    @Autowired
+    private final JsonReader jsonReader;
+
     private Integer ageCalculator(LocalDate birthDate) {
         Period p = Period.between(birthDate, LocalDate.now());
         return p.getYears();
@@ -37,10 +42,11 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-    public SafetyNetAlertsServiceImpl(IPersonDao personDao, IMedicalRecordsDao medicalRecordsDao, IFireStationDao fireStationDao) {
+    public SafetyNetAlertsServiceImpl(IPersonDao personDao, IMedicalRecordsDao medicalRecordsDao, IFireStationDao fireStationDao, JsonReader jsonReader) {
         this.personDao = personDao;
         this.medicalRecordsDao = medicalRecordsDao;
         this.fireStationDao = fireStationDao;
+        this.jsonReader = jsonReader;
     }
 
 
@@ -69,21 +75,27 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
             LocalDate age = LocalDate.parse(medicalRecords.getBirthDate(), formatter);
 
             if (ageCalculator(age) < 18) {
-
+               // LinkedHashMap<String, Object> obj3 = new LinkedHashMap<>();
+              //  LinkedHashMap<String, Object> obj = new LinkedHashMap<>();
+                //list.add(obj3);
                 LinkedHashMap<String, String> childs = new LinkedHashMap<>();
 
                 childs.put("Firstname", person.getFirstName());
                 childs.put("Lastname", person.getLastName());
                 childs.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
 
-                list.add(childs);
+               list.add(childs);
+               // obj.put("Child", childs);
+                //obj3.putAll(obj);
 
                 personListByAddress.stream().filter(p1->!(p1.getFirstName().equals(person.getFirstName())&& p1.getLastName().equals(person.getLastName()))).forEach(p2->{
-
+                   // LinkedHashMap<String, Object> obj2 = new LinkedHashMap<>();
                     LinkedHashMap<String, String> adults = new LinkedHashMap<>();
                     adults.put("Firstname", p2.getFirstName());
                     adults.put("Lastname", p2.getLastName());
+                   // obj2.put("Family", adults);
 
+                   // obj3.putAll(obj2);
                     list.add(adults);
 
                 });
@@ -250,7 +262,6 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
         ArrayList<HashMap> list = new ArrayList<>();
 
-
     for (Integer i : stationNumberList ) {
 
 
@@ -258,10 +269,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
         fireStations.put("StationNumber", i);
         list.add(fireStations);
 
-
-
         List<FireStation> fireStationList = fireStationDao.getByStationNumber(String.valueOf(i));
-
 
         for (FireStation fireStation : fireStationList) {
 
@@ -270,9 +278,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
             list.add( addressList);
 
 
-
             List<Person> personsList = personDao.getByAddress(fireStation.getAddress());
-
             for ( Person person : personsList) {
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
 
@@ -284,7 +290,6 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 people.put("Lastname", person.getLastName());
                 people.put("Phone", person.getTelephone());
                 people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
-
 
                 LinkedHashMap<String, List> medical = new LinkedHashMap<>();
                 medical.put("Medication", medicalRecords.getMedication());
@@ -303,5 +308,14 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
 
 
         return list;
+    }
+
+
+    public ArrayList<FloodResponse> getFlood(List<Integer> stationNumber) {
+
+        ArrayList listFloodResponse = jsonReader.listFloodResponse;
+
+
+        return listFloodResponse;
     }
 }
