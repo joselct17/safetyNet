@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class FloodResponse {
 
-    private Integer stationNumber;
+    private String stationNumber;
 
     private String address;
 
