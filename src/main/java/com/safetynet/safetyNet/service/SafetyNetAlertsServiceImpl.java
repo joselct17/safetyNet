@@ -217,20 +217,17 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
         return list;
     }
 
-    @Override
-    public ArrayList<HashMap> getPeopleByName(String firstName, String lastName) {
+   @Override
+    public ArrayList<HashMap> getPeopleByFirstNameAndLastName(String firstName, String lastName) {
 
         ArrayList<HashMap> list = new ArrayList<>();
 
         Person person = personDao.getByName(firstName, lastName);
 
-
         if (person!= null) {
-            for (Person p: personDao.getByLastName(person.getLastName())) {
-
+            for (Person p: personDao.findByFirstNameAndLastName(person.getFirstName(),person.getLastName())) {
 
                 MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
-
 
                 LinkedHashMap<String, Object> result = new LinkedHashMap<>();
 
@@ -252,6 +249,29 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
                 list.add(result);
 
             }
+
+            for (Person p: personDao.getByLastName(person.getLastName())) {
+                MedicalRecords medicalRecords = medicalRecordsDao.getByName(person.getFirstName(), person.getLastName());
+
+                LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+
+                LinkedHashMap<String, String> people = new LinkedHashMap<>();
+
+                people.put("Firstname", p.getFirstName());
+                people.put("Lastname", p.getLastName());
+                people.put("Address", p.getAddress());
+                people.put("Age", String.valueOf((ageCalculator(LocalDate.parse(medicalRecords.getBirthDate(), formatter)))));
+                people.put("Email", p.getEmail());
+
+                LinkedHashMap<String, List> medical = new LinkedHashMap<>();
+                medical.put("Medication", medicalRecords.getMedication());
+                medical.put("Allergies", medicalRecords.getAllergies());
+
+                result.putAll(people);
+                result.putAll(medical);
+
+                list.add(result);
+            }
         }
 
         return list;
@@ -260,9 +280,7 @@ public class SafetyNetAlertsServiceImpl implements ISafetyNetAlertsService {
     @Override
     public ArrayList<Object> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList) {
 
-
         ArrayList<Object> list = new ArrayList<>();
-
 
     for (Integer i : stationNumberList ) {
 
