@@ -17,7 +17,7 @@ public interface IPersonDao {
 
         List<Person> getByCity(String city);
 
-
+        List<Person> findByFirstNameAndLastName(String firstName, String lastName);
 
         Person getByName(String firstName, String lastName);
 
