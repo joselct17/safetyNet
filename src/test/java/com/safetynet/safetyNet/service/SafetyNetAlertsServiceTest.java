@@ -1,14 +1,11 @@
 package com.safetynet.safetyNet.service;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.safetynet.safetyNet.dao.IFireStationDao;
 import com.safetynet.safetyNet.dao.IMedicalRecordsDao;
 import com.safetynet.safetyNet.dao.IPersonDao;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -138,9 +135,9 @@ public class SafetyNetAlertsServiceTest {
         void testGetChildsByAddress() throws ParseException {
 
         //ARRANGE
-            ArrayList<LinkedHashMap> expected = new ArrayList<>();
+            ArrayList<Object> expected = new ArrayList<>();
 
-            LinkedHashMap<String, Object> total = new LinkedHashMap<>();
+            ArrayList<Object> total = new ArrayList<>();
 
             LinkedHashMap<String, String> childs = new LinkedHashMap<>();
 
@@ -150,7 +147,7 @@ public class SafetyNetAlertsServiceTest {
             childs.put("Lastname", "Norton");
             childs.put("Age", "7");
 
-            total.putAll(childs);
+            total.add(childs);
 
 
             expected.add(total);
@@ -159,7 +156,7 @@ public class SafetyNetAlertsServiceTest {
             when(iMedicalRecordsDao.getByName("Ed","Norton")).thenReturn(EdNortonMedical);
 
             //Act
-            ArrayList<LinkedHashMap> result = safetyNetAlertsService.getChildsByAddress("102 Av");
+            ArrayList<Object> result = safetyNetAlertsService.getChildsByAddress("102 Av");
 
             //Assert
             assertEquals(expected,result);
