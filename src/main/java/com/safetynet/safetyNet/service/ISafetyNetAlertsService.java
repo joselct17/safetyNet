@@ -12,7 +12,7 @@ public interface ISafetyNetAlertsService {
     Set<String> getEmailsByCity(String city);
 
 
-    ArrayList<LinkedHashMap> getChildsByAddress(String address) throws ParseException;
+    ArrayList<Object> getChildsByAddress(String address) throws ParseException;
 
 
     ArrayList<HashMap> getPeopleByStationNumber(String stationNumber);
@@ -26,7 +26,7 @@ public interface ISafetyNetAlertsService {
     ArrayList<HashMap> getPeopleByName(String firstName, String lastName);
 
 
-    ArrayList<HashMap> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList );
+    ArrayList<Object> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList );
 
 
 
