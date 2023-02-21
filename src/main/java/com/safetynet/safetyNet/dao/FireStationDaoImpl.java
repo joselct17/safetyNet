@@ -3,6 +3,8 @@ package com.safetynet.safetyNet.dao;
 import com.safetynet.safetyNet.json.JsonReader;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.Person;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Repository
 public class FireStationDaoImpl implements IFireStationDao {
 
+    private final Logger logger = LoggerFactory.getLogger(FireStationDaoImpl.class);
     @Autowired
     private JsonReader jsonReader;
 
@@ -39,7 +42,14 @@ public class FireStationDaoImpl implements IFireStationDao {
         if (result.size()==1) {
             return result.get(0).getStationNumber();
         }
-        else return null;
+        else if (result.isEmpty()) { //not found is not an error
+            return null;
+        }
+        else {//this is to test case doubles : error
+            logger.debug("Found {} firestations for address={} , but was expecting 1.",result.size(), address );
+            throw new IllegalStateException("Found "+result.size()+" persons for " +
+                    " " + address + ", but was expecting 1 Firestation.");
+        }
     }
 
     @Override
