@@ -85,22 +85,6 @@ public class SafetyNetAlertsController {
         return new ResponseEntity<>(object, HttpStatus.OK);
     }
 
-    //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
-//CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
-    @GetMapping("/flood/stations/{stationNumberList}")
-    public ResponseEntity<JSONObject> peopleByStationNumber(@PathVariable List<Integer> stationNumberList) {
-
-        logger.info("GET /flood called");
-
-        JSONObject object = new JSONObject();
-        JSONArray result = new JSONArray();
-        result.add(safetyNetAlertsService.getAddressesListOfPersonsByStationNumberList(stationNumberList));
-        object.put("People", result);
-
-        logger.info("GET /flodd response : OK");
-        return new ResponseEntity<>(object, HttpStatus.OK);
-
-    }
 
     //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
     @GetMapping("/personInfo")
@@ -130,6 +114,24 @@ public class SafetyNetAlertsController {
         object.put("Emails", result);
 
         logger.info("GET /communityEmail response : OK");
+        return new ResponseEntity<>(object, HttpStatus.OK);
+
+    }
+
+
+    //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
+//CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
+    @GetMapping("/flood/stations")
+    public ResponseEntity<JSONObject> peopleByStationNumber(@RequestParam List<Integer> stations) {
+
+        logger.info("GET /flood called");
+
+        JSONObject object = new JSONObject();
+        JSONArray result = new JSONArray();
+        result.add(safetyNetAlertsService.getAddressesListOfPersonsByStationNumberList(stations));
+        object.put("People", result);
+
+        logger.info("GET /flodd response : OK");
         return new ResponseEntity<>(object, HttpStatus.OK);
 
     }
