@@ -23,7 +23,7 @@ public interface ISafetyNetAlertsService {
     ArrayList<HashMap> getPeopleByFireAddress(String address);
 
 
-    ArrayList<HashMap> getPeopleByName(String firstName, String lastName);
+    ArrayList<HashMap> getPeopleByFirstNameAndLastName(String firstName, String lastName);
 
 
     ArrayList<Object> getAddressesListOfPersonsByStationNumberList(List<Integer> stationNumberList );
