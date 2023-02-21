@@ -42,13 +42,8 @@ public class MedicalRecordsDaoImpl implements IMedicalRecordsDao {
         if (result.size()==1) {
             return result.get(0);
         }
-        else if (result.isEmpty()) {
+        else  {
             return null;
-        }
-        else {
-            logger.debug("Found {} Medicalrecords for {} {}",result.size(), firstName, lastName );
-            throw new IllegalStateException ("Found "+result.size()+" Medicalrecords for "+result.size()+
-                    " "+ firstName+" "+ lastName + ", but was expecting 1 Medicalrecord." );
         }
     }
 
