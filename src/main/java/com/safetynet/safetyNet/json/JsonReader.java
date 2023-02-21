@@ -85,6 +85,7 @@ public class JsonReader {
         while (medic.hasNext()) {
 
             JSONObject o = medic.next();
+
             MedicalRecords medicalRec = new MedicalRecords();
             medicalRec.setFirstName((String)o.get("firstName"));
             medicalRec.setLastName((String)o.get("lastName"));
@@ -97,32 +98,22 @@ public class JsonReader {
 
         }
 
-        while (fire.hasNext()) {
-            JSONObject o = per.next();
+        while (fire.hasNext() && per.hasNext() && medic.hasNext()) {
+            JSONObject oFire = fire.next();
+            JSONObject oPer = per.next();
+            JSONObject oMedic = medic.next();
 
             FloodResponse floodResponse = new FloodResponse();
-            floodResponse.setAddress((String)o.get("address"));
-            floodResponse.setStationNumber((Integer) o.get("station"));
-            listFloodResponse.add(floodResponse);
-        }
+            floodResponse.setAddress((String)oFire.get("address"));
+            floodResponse.setStationNumber((String) oFire.get("station"));
 
-        while (per.hasNext()) {
-            JSONObject o = per.next();
+            floodResponse.setFirstName((String)oPer.get("firstName"));
+            floodResponse.setLastName((String)oPer.get("lastName"));
+            floodResponse.setTelephone((String) oPer.get("phone"));
 
-            FloodResponse floodResponse = new FloodResponse();
-            floodResponse.setFirstName((String)o.get("firstName"));
-            floodResponse.setLastName((String)o.get("lastName"));
-            floodResponse.setTelephone((String) o.get("phone"));
-            listFloodResponse.add(floodResponse);
-
-        }
-        while (medic.hasNext()) {
-            JSONObject o = medic.next();
-
-            FloodResponse floodResponse = new FloodResponse();
-            floodResponse.setBirthDate((String) o.get("birthdate"));
-            floodResponse.setMedication((ArrayList<String>) o.get("medications"));
-            floodResponse.setAllergies((ArrayList<String>) o.get("allergies"));
+            floodResponse.setBirthDate((String) oMedic.get("birthdate"));
+            floodResponse.setMedication((ArrayList<String>) oMedic.get("medications"));
+            floodResponse.setAllergies((ArrayList<String>) oMedic.get("allergies"));
             listFloodResponse.add(floodResponse);
         }
 
