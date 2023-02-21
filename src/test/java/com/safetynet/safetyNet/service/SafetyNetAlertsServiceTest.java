@@ -278,7 +278,7 @@ public class SafetyNetAlertsServiceTest {
 
             //ACT
 
-            ArrayList result = safetyNetAlertsService.getPeopleByName("John", "McAvoy");
+            ArrayList result = safetyNetAlertsService.getPeopleByFirstNameAndLastName("John", "McAvoy");
 
             //ASSERT
             assertEquals(expected, result);
