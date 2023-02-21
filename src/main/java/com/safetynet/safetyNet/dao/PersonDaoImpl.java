@@ -48,6 +48,14 @@ public class PersonDaoImpl implements IPersonDao {
         else return null;
     }
 
+    @Override
+    public List<Person> findByFirstNameAndLastName(String firstName, String lastName) {
+        return jsonReader.listPersons.stream()
+                .filter(person -> (person.getFirstName().equals(firstName)
+                        && person.getLastName().equals(lastName)))
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public List<Person> getByAddress(String address) {
