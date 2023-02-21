@@ -88,12 +88,12 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
     @GetMapping("/personInfo")
-    public ResponseEntity<JSONObject> peopleByName(@RequestParam(required = false) String firstName, @RequestParam String lastName) {
+    public ResponseEntity<JSONObject> getPeopleByFirstNameandLastName(@RequestParam String firstName, @RequestParam String lastName) {
         logger.info("GET /personInfo called");
-//donc corriger url, si John Boyd seulement jhon boyd doit etre envoyé, si seulement on met Boyd tous les boyds doievent apparaitre
+
         JSONObject object = new JSONObject();
         JSONArray result = new JSONArray();
-        result.add(safetyNetAlertsService.getPeopleByName(firstName,lastName));
+        result.add(safetyNetAlertsService.getPeopleByFirstNameAndLastName(firstName,lastName));
         object.put("People", result);
 
         logger.info("GET /personInfo response : OK");
@@ -120,7 +120,6 @@ public class SafetyNetAlertsController {
 
 
     //http://localhost:8080/flood/stations?stations=<a list of station_numbers>
-//CORRIGER CETTE REQUETTE, AVEC REQUESTPARAM CA NE MARCHE PAS
     @GetMapping("/flood/stations")
     public ResponseEntity<JSONObject> peopleByStationNumber(@RequestParam List<Integer> stations) {
 
