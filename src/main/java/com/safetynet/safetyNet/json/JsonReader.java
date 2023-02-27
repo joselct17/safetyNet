@@ -3,7 +3,6 @@ package com.safetynet.safetyNet.json;
 import com.safetynet.safetyNet.model.FireStation;
 import com.safetynet.safetyNet.model.MedicalRecords;
 import com.safetynet.safetyNet.model.Person;
-import com.safetynet.safetyNet.service.FloodResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 @Component
@@ -25,16 +23,16 @@ public class JsonReader {
 
     public ArrayList<MedicalRecords> listMedicalRecords;
 
-    public ArrayList<FloodResponse> listFloodResponse;
 
 
-    public JsonReader(ArrayList<Person> listPersons, ArrayList<FireStation> listFireStation, ArrayList<MedicalRecords> listMedicalRecords , ArrayList<FloodResponse> listFloodResponse) throws ParseException, IOException, FileNotFoundException {
+
+    public JsonReader(ArrayList<Person> listPersons, ArrayList<FireStation> listFireStation, ArrayList<MedicalRecords> listMedicalRecords) throws ParseException, IOException, FileNotFoundException {
 
 
         this.listPersons = listPersons;
         this.listFireStation = listFireStation;
         this.listMedicalRecords = listMedicalRecords;
-        this.listFloodResponse = listFloodResponse;
+
 
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader("src/main/resources/JSON/data.JSON");
@@ -96,25 +94,6 @@ public class JsonReader {
             listMedicalRecords.add(medicalRec);
 
 
-        }
-
-        while (fire.hasNext() && per.hasNext() && medic.hasNext()) {
-            JSONObject oFire = fire.next();
-            JSONObject oPer = per.next();
-            JSONObject oMedic = medic.next();
-
-            FloodResponse floodResponse = new FloodResponse();
-            floodResponse.setAddress((String)oFire.get("address"));
-            floodResponse.setStationNumber((String) oFire.get("station"));
-
-            floodResponse.setFirstName((String)oPer.get("firstName"));
-            floodResponse.setLastName((String)oPer.get("lastName"));
-            floodResponse.setTelephone((String) oPer.get("phone"));
-
-            floodResponse.setBirthDate((String) oMedic.get("birthdate"));
-            floodResponse.setMedication((ArrayList<String>) oMedic.get("medications"));
-            floodResponse.setAllergies((ArrayList<String>) oMedic.get("allergies"));
-            listFloodResponse.add(floodResponse);
         }
 
     }
