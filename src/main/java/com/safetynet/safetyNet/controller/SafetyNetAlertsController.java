@@ -88,7 +88,7 @@ public class SafetyNetAlertsController {
 
     //http://localhost:8080/personInfo?firstName=<firstName>&lastName=<lastName>
     @GetMapping("/personInfo")
-    public ResponseEntity<JSONObject> getPeopleByFirstNameandLastName(@RequestParam String firstName, @RequestParam String lastName) {
+    public ResponseEntity<JSONObject> getPeopleByFirstNameandLastName(@RequestParam (required=false) String firstName, @RequestParam (required=false) String lastName) {
         logger.info("GET /personInfo called");
 
         JSONObject object = new JSONObject();
